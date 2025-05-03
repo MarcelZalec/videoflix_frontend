@@ -1,0 +1,17 @@
+<body>
+    <header>
+        <div class="frame">
+            <div>
+                <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
+            </div>
+            <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
+        </div>
+    </header>
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+    <footer>
+        <a routerLink="routeName">Datenschutz</a>
+        <a routerLink="routeName">Impressum</a>
+    </footer>
+</body>

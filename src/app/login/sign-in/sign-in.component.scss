@@ -1,0 +1,22 @@
+@use './../login.component.scss';
+@use './../../../colors.scss' as c;
+@use './../../../mixins.scss' as mix;
+
+*{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.new {
+    @include mix.flex($g: 16px);
+    flex-direction: row;
+}
+
+a {
+    text-decoration: none;
+    &:hover {
+        cursor: pointer;
+    }
+}

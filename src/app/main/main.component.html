@@ -1,0 +1,18 @@
+<body>
+    <header>
+        <div class="frame">
+            <div>
+                <img (click)="goToMainManu()" src="./svgs/Symbol.svg" alt="">
+            </div>
+            <button [ngClass]="(mainMenu) ? 'd-none': 'flex'" (click)="logout()">
+                <div>
+                    <img src="svgs/logout.svg" alt="">
+                    <span>Log out</span>
+                </div>
+            </button>
+        </div>
+    </header>
+    <main>
+        
+    </main>
+</body>

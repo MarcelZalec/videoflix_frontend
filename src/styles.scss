@@ -1,1 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
+@use "./colors.scss" as colors;
+*{
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    body {
+        max-width: 1920px;
+        max-height: 1080px;
+    }
+    font-family: 'DM Sans';
+}
+
+h1 {
+    font-weight: 700;
+    line-height: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.d-none {
+    display: none;
+}
+
+app-sign-in,
+app-sign-up,
+app-forget-password,
+app-reset-password {
+    width: 100%;
+    background-color: unset;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../public/fonts/dm-sans-v15-latin-500.woff2') format('truetype');
+}
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../public/fonts/dm-sans-v15-latin-700.woff2') format('truetype');
+}
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../public/fonts/dm-sans-v15-latin-regular.woff2') format('truetype');
+}

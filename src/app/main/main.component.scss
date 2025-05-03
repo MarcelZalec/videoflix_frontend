@@ -1,0 +1,44 @@
+@use "./../../colors.scss" as c;
+@use "./../../mixins.scss" as mix;
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: c.$background;
+    color: c.$whiteText;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    height: 108px;
+    display: flex;
+}
+
+.frame {
+    width: 100vw;
+    max-width: 1440px;
+    @include mix.flex($j: space-between);
+    padding: 10px 96px;
+    >div>img{
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+button{
+    @include mix.button;
+    div {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        gap: 4px;
+    }
+}
+
+main {
+    min-height: calc(100vh - 108px);
+    min-width: 100vw;
+    background-color: rgba($color: aqua, $alpha: 0.2);
+}

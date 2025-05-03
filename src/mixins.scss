@@ -1,0 +1,23 @@
+@use "./colors.scss" as c;
+
+@mixin flex($j: center, $a: center, $g: 0){
+    display: flex;
+    justify-content: $j;
+    align-items: $a;
+    gap: $g;
+}
+
+@mixin button($color: null){
+    $color: if($color == null, c.$purple, $color);
+    justify-content: center;
+    align-items: center;
+    border-radius: 40px;
+    height: 48px;
+    background-color: $color;
+    padding: 12px 24px;
+    font-weight: 700;
+    font-size: 18px;
+    border: unset;
+    color: c.$whiteText;
+    cursor: pointer;
+}

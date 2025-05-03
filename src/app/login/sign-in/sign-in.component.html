@@ -1,0 +1,20 @@
+<div>
+    <h1>Log in</h1>
+    <form class="form" action="login()" [formGroup]="signInForm">
+        <div class="input">
+            <img src="svgs\mail.svg" alt="">
+            <input type="text" formControlName="email" placeholder="Email Address">
+        </div>
+        <div class="input">
+            <img src="svgs\password.svg" alt="">
+            <input id="passwordField1" [type]="lh.passwordFields[0].inputType" formControlName="password" placeholder="Password">
+            <img (click)="lh.changeVisibility(0)" class="passowordVisibility" [src]="lh.passwordFields[0].src" alt="">
+        </div>
+    </form>
+    <button (click)="loginF()">Log in</button>
+    <a (click)="goToForgetPassword()">Forgot password?</a>
+    <div class="new">
+        <span>New to Videoflix?</span>
+        <a (click)="goToSignUp()">Sign Up now</a>
+    </div>
+</div>
