@@ -1,5 +1,6 @@
 @use "./../../colors.scss" as c;
 @use "./../../mixins.scss" as mix;
+@use "./../app.component.scss";
 
 *{
     font-size: 18px;
@@ -82,6 +83,27 @@ main {
         left: unset;
         &:hover {
             cursor: pointer;
+        }
+    }
+}
+
+.startpage {
+    @include mix.flex($g:32px);
+    flex-direction: column;
+    .form {
+        @include mix.flex($g:16px);
+        flex-direction: row;
+        button {
+            @include mix.flex($g:10px);
+            min-width: fit-content;
+        }
+    }
+    .input {
+        border-color: c.$whiteText;
+        border-radius: 50px;
+        width: 360px;
+        input {
+            padding-left: 24px;
         }
     }
 }

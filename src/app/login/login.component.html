@@ -7,11 +7,35 @@
             <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
         </div>
     </header>
-    <main>
-        <router-outlet></router-outlet>
-    </main>
+    @if(startpage) {
+        <div class="startpage">
+            <h1>Movies, TV shows, and more</h1>
+            <span>Enter your email to create or restart your subscription.</span>
+            <form class="form" action="login()" [formGroup]="startForm">
+                <div class="input_with_errorcont">
+                    <div class="input">
+                        <input type="text" formControlName="email" placeholder="Email Address">
+                    </div>
+                    @if(errorMessage) {
+                        <div class="errorcont">
+                            <p class="errormsg">E-Mail not valid</p>
+                        </div>
+                    }
+                </div>
+                <button (click)="goToSignUp()">
+                    <span>Sign Up</span>
+                    <img src="svgs/chevron_right.svg" alt="">
+                </button>
+            </form>
+        </div>
+    }@else {
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    }
     <footer>
         <a routerLink="routeName">Datenschutz</a>
         <a routerLink="routeName">Impressum</a>
     </footer>
+    @if(toastMessage == '') {<app-toastmsg></app-toastmsg>}
 </body>

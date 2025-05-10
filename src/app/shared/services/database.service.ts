@@ -1,24 +1,31 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { catchError, filter, map, tap } from 'rxjs/operators';
+import * as Config from './../config' 
+import { VideoModel } from '../models/video.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  // private httpClientWithoutInterceptor: HttpClient;
-  API_BASE_URL = 'http://127.0.0.1:8000/api/';
-  STATIC_BASE_URL = 'http://127.0.0.1:8000/';
-  LOGIN_URL = 'login/';
-  REGISTER_URL='registration/';
+  public videoSubject = new BehaviorSubject<VideoModel[]>([]);
+  public videos$ = this.videoSubject.asObservable();
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
-    // this.httpClientWithoutInterceptor = new HttpClient(httpBackend);
-  }
+  constructor(private http: HttpClient) {}
 
-  get() {
-    return this.http.get(`${this.API_BASE_URL}videos/`).subscribe(data => {
-      console.log("Das ist der Request: ", data)
-    })
+  async loadVideos() {
+    return this.http
+      .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`)
+      .pipe(
+        tap((v) => {
+          this.videoSubject.next(v);
+        }),
+        catchError((e) => {
+          console.error("Error loading videos:", e);
+          return of([]);
+        })
+      )
+      .subscribe();
   }
 }

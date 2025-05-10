@@ -28,6 +28,14 @@ h1 {
     display: none;
 }
 
+input::placeholder {
+    color: colors.$utilityWhite;
+}
+
+.errormsg {
+    color: colors.$error !important;
+}
+
 app-sign-in,
 app-sign-up,
 app-forget-password,

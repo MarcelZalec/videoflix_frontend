@@ -9,7 +9,6 @@ import { MainComponent } from './main/main.component';
 export const routes: Routes = [
     {
         path: '', component: LoginComponent, children: [
-            { path: '', component: SignInComponent },
             { path: 'login', component: SignInComponent },
             { path: 'forget', component: ForgetPasswordComponent },
             { path: 'signUp', component: SignUpComponent },

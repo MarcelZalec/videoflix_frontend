@@ -16,7 +16,8 @@ export class MainComponent {
     private dbs: DatabaseService,
     private router:Router
   ){
-    this.dbs.get()
+    this.dbs.loadVideos()
+    console.log(dbs.videos$)
   }
 
   logout(){
