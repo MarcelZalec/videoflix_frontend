@@ -34,6 +34,7 @@ export class LoginComponent {
       sessionStorage.setItem('email', this.startForm.get('email')?.value)
       this.router.navigateByUrl('signUp')
     } else {
+      this.lh.showToastSignal('E-Mail not valid')
       this.errorMessage = true;
     }
   }

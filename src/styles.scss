@@ -44,6 +44,10 @@ app-reset-password {
     background-color: unset;
 }
 
+app-toastmsg {
+    position: absolute;
+}
+
 @font-face {
     font-family: 'DM Sans';
     src: url('../public/fonts/dm-sans-v15-latin-500.woff2') format('truetype');

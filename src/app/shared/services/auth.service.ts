@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, firstValueFrom } from 'rxjs';
 import { SignupModel, LoginModel } from '../models/login.model';
 import * as Config from '../config';
+import { LittleHelpersService } from './little-helpers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,11 @@ import * as Config from '../config';
 export class AuthService {
   private httpClientWithoutInterceptor: HttpClient;
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+  constructor(
+    private http: HttpClient,
+    private httpBackend: HttpBackend,
+    private lh: LittleHelpersService
+  ) {
     this.httpClientWithoutInterceptor = new HttpClient(httpBackend);
   }
 
@@ -29,7 +34,20 @@ export class AuthService {
     return this.http.post(`${Config.FULL_REGISTRATION_URL}`, user)
   }
 
-  forgetPass(email:string) {
-    return this.http.post(`${Config.FULL_REGISTRATION_URL}`, email)
+  async forgetPass(email: string): Promise<any> {
+    const body = { email };
+    const link = `${Config.FULL_RESETPASS_URL}`;
+    try {
+      const response = await firstValueFrom(
+        this.httpClientWithoutInterceptor.post<any>(link, body, {
+          headers: { 'Content-Type': 'application/json' },
+          observe: 'response',
+        })
+      );
+      return response;
+    } catch (error) {
+      console.error('Request-Fehler:', error);
+      throw error;
+    }
   }
 }

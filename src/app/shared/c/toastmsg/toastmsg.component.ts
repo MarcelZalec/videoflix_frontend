@@ -17,4 +17,8 @@ export class ToastmsgComponent {
   get errmsg() {
     return this.lh.toastSignal();
   }
+
+  close() {
+    this.lh.toastSignal.set('');
+  }
 }

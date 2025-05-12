@@ -16,11 +16,6 @@
                     <div class="input">
                         <input type="text" formControlName="email" placeholder="Email Address">
                     </div>
-                    @if(errorMessage) {
-                        <div class="errorcont">
-                            <p class="errormsg">E-Mail not valid</p>
-                        </div>
-                    }
                 </div>
                 <button (click)="goToSignUp()">
                     <span>Sign Up</span>
@@ -37,5 +32,5 @@
         <a routerLink="routeName">Datenschutz</a>
         <a routerLink="routeName">Impressum</a>
     </footer>
-    @if(toastMessage == '') {<app-toastmsg></app-toastmsg>}
+    @if(toastMessage != '') {<app-toastmsg></app-toastmsg>}
 </body>
