@@ -2,7 +2,7 @@
     <header>
         <div class="frame">
             <div>
-                <img (click)="goToMainManu()" src="./svgs/Symbol.svg" alt="">
+                <img (click)="goToMainMenu()" src="./svgs/Symbol.svg" alt="">
             </div>
             <button [ngClass]="(mainMenu) ? 'd-none': 'flex'" (click)="logout()">
                 <div>
@@ -13,6 +13,24 @@
         </div>
     </header>
     <main>
-        
+        <div>
+            <app-video-player></app-video-player>
+        </div>
+        @if(0 != 0) {
+            <div *ngFor="let video of videos">
+                <h5>{{ video.title }}</h5>
+                <img src="video.thumbnail" alt="">
+                <video 
+                    #target
+                    class="video-js"
+                    controls
+                    muted
+                    playsinline
+                    preload="none"
+                    src=""
+                    poster="video.thumbnail"
+                ></video>
+            </div>
+        }
     </main>
 </body>
