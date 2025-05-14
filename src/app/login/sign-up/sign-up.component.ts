@@ -45,11 +45,13 @@ export class SignUpComponent {
         this.signUpForm.value.password,
         this.signUpForm.value.password2
       )
-      if (this.signUpForm.valid && this.signUpForm.value.password == this.signUpForm.value.password2) {
+      if (!this.signUpForm.valid) {
+        this.lh.showToastSignal('You must fill all fields')
+      } else if (this.signUpForm.valid && this.signUpForm.value.password == this.signUpForm.value.password2) {
         await lastValueFrom(this.as.register(user))
       } else if(this.signUpForm.value.password != this.signUpForm.value.password2){
         this.lh.showToastSignal("Passwords do not match!")
-      }
+      } else return
     } catch (e:any) {
       if (e) {
         this.lh.showToastSignal(`${e.error['email'][0]}`)

@@ -31,7 +31,11 @@ export class AuthService {
   }
   
   register(user: SignupModel): Observable<Object> {
-    return this.http.post(`${Config.FULL_REGISTRATION_URL}`, user)
+    return this.http.post(`${Config.FULL_REGISTRATION_URL}`, user).pipe(
+      tap((r)=> {
+        this.lh.showToastSignal('Activation Mail send')
+      })
+    )
   }
 
   async forgetPass(email: string): Promise<any> {
