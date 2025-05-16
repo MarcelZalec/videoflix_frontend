@@ -30,17 +30,23 @@ export class SignInComponent {
   }
 
   async login() {
-    if(this.signInForm.valid){
-      let user= new LoginModel(
-        this.signInForm.value.email,
-        this.signInForm.value.password,
-        this.signInForm.value.remember,
-      )
-      await lastValueFrom(this.as.login(user))
-      this.router.navigateByUrl('main')
-    }else {
-      this.lh.clearForm(this.signInForm)
+    let user= new LoginModel(
+      this.signInForm.value.email,
+      this.signInForm.value.password,
+      this.signInForm.value.remember = this.signInForm.value.remember || false,
+    )
+    if(!this.signInForm.valid) {
+      this.lh.showToastSignal('Invalid Form all fields must be filled')
     }
+    if(this.signInForm.valid){
+      try {
+        await lastValueFrom(this.as.login(user))
+        this.router.navigateByUrl('main')
+      } catch (error) {
+        this.lh.showToastSignal('Invalid login credentials')
+        this.lh.clearForm(this.signInForm)
+      }
+    }      
   }
 
   goToForgetPassword() {
@@ -49,5 +55,9 @@ export class SignInComponent {
 
   goToSignUp() {
     this.router.navigateByUrl('signUp')
+  }
+
+  get toastMessage() {
+    return this.lh.toastSignal()
   }
 }

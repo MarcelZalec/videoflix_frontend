@@ -13,24 +13,25 @@
         </div>
     </header>
     <main>
+        @if(currentSource != 'q') {
         <div>
             <app-video-player></app-video-player>
         </div>
-        @if(0 != 0) {
-            <div *ngFor="let video of videos">
-                <h5>{{ video.title }}</h5>
-                <img src="video.thumbnail" alt="">
-                <video 
-                    #target
-                    class="video-js"
-                    controls
-                    muted
-                    playsinline
-                    preload="none"
-                    src=""
-                    poster="video.thumbnail"
-                ></video>
+        }
+        @if(this.videos.length != 0) {
+        <div class="category_cont">
+            <div class="video_frame" *ngFor="let category of categorys">
+                <h2>{{category.toUpperCase()}}</h2>
+                <div>
+                    @for(video of videos; track video) {
+                        <div class="s_video" *ngIf="video.category === category" (click)="setActiveVideo(video.id)">
+                            <h5>{{ video.title }}</h5>
+                            <img (click)="setActiveVideo(video.id)" src="video.thumbnail" alt="">
+                        </div>
+                    }
+                </div>
             </div>
+        </div>
         }
     </main>
 </body>

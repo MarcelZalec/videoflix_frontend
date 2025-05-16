@@ -2,7 +2,7 @@
 @use "./../../mixins.scss" as mix;
 
 body {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     background-color: c.$background;
     color: c.$whiteText;
@@ -41,4 +41,30 @@ main {
     min-height: calc(100vh - 108px);
     min-width: 100vw;
     background-color: c.$background;
+    padding: 0px 40px;
+}
+
+.category_cont{
+    @include mix.flex($a:start, $g:20px);
+    flex-direction: column;
+}
+
+.video_frame {
+    @include mix.flex($a:start);
+    flex-direction: column;
+    >div {
+        margin-top: 20px;
+        @include mix.flex($g:20px);
+        flex-direction: row;
+    }
+}
+
+.s_video {
+    width: 250px;
+    height: 150px;
+    background-color: gray;
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+    }
 }
