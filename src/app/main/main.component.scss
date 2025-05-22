@@ -63,8 +63,18 @@ main {
     width: 250px;
     height: 150px;
     background-color: gray;
+    position: relative;
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
+    }
+
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: fit-content;
+        width: fit-content;
+        z-index: -1;
     }
 }

@@ -1,10 +1,10 @@
 <body>
     <header>
-        <div class="frame">
+        <div class="frame" [ngClass]="(mainMenu) ? 'd-none': 'flex'">
             <div>
                 <img (click)="goToMainMenu()" src="./svgs/Symbol.svg" alt="">
             </div>
-            <button [ngClass]="(mainMenu) ? 'd-none': 'flex'" (click)="logout()">
+            <button (click)="logout()">
                 <div>
                     <img src="svgs/logout.svg" alt="">
                     <span>Log out</span>
@@ -13,7 +13,7 @@
         </div>
     </header>
     <main>
-        @if(currentSource != 'q') {
+        @if(currentSource != '') {
         <div>
             <app-video-player></app-video-player>
         </div>
@@ -24,10 +24,12 @@
                 <h2>{{category.toUpperCase()}}</h2>
                 <div>
                     @for(video of videos; track video) {
-                        <div class="s_video" *ngIf="video.category === category" (click)="setActiveVideo(video.id)">
+                        @if(video.category === category) {
+                        <div class="s_video" (click)="setActiveVideo(video.id)">
                             <h5>{{ video.title }}</h5>
                             <img (click)="setActiveVideo(video.id)" src="video.thumbnail" alt="">
                         </div>
+                        }
                     }
                 </div>
             </div>

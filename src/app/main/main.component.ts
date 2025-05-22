@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
 import { VideoModel } from '../shared/models/video.model';
@@ -15,7 +15,7 @@ import { ComunicationService } from '../shared/services/comunication.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   mainMenu:boolean = false;
   videos:any[] = [];
   categorys:string[] = [];
@@ -35,6 +35,11 @@ export class MainComponent implements OnInit {
     this.dbs.loadVideos();
   }
 
+  ngOnDestroy(): void {
+      this.videos = [];
+      this.categorys = [];
+  }
+
   logout(){
     this.router.navigateByUrl('')
   }
@@ -45,6 +50,7 @@ export class MainComponent implements OnInit {
 
   getVideoDetails(){
     this.dbs.videos$.subscribe((v) => {
+      console.log(v)
       v.forEach((obj) => {
         let data = {
           id:obj.id,

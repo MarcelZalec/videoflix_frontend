@@ -15,6 +15,7 @@ export class DatabaseService {
   constructor(private http: HttpClient) {}
 
   async loadVideos() {
+    console.log("run Video load from Dtabase....")
     return this.http
       .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`)
       .pipe(
