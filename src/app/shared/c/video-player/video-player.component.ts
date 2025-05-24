@@ -1,10 +1,5 @@
-import { Component } from '@angular/core';
-import { DatabaseService } from '../../services/database.service';
-import { Router } from '@angular/router';
-import { VideoModel } from '../../models/video.model';
-import * as Config from '../../config'
+import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import videojs from 'video.js'
-import { map } from 'rxjs';
 import { ComunicationService } from '../../services/comunication.service';
 
 @Component({
@@ -13,55 +8,48 @@ import { ComunicationService } from '../../services/comunication.service';
   templateUrl: './video-player.component.html',
   styleUrl: './video-player.component.scss'
 })
-export class VideoPlayerComponent {
+export class VideoPlayerComponent implements OnInit, OnDestroy {
+  @ViewChild('target', { static: true }) videoElement!: ElementRef;
+  @Input() videoOptions!: { sources: { src: string; type: string }[] };
+  private player!:any;// videojs.Player; 
   element:any;
   currentSource = '';
 
   constructor(
-    private dbs: DatabaseService,
-    private router:Router,
     private com: ComunicationService,
   ){
-    this.jumpToLastTimestep();
     this.getActiveVideo();
+  }
+
+  ngOnInit(): void {
+      
+  }
+
+  initializePlayer() {
+    if (this.videoElement && this.videoElement.nativeElement) {
+      this.player = videojs(this.videoElement.nativeElement, {
+        ...this.videoOptions,
+        controlBar: {
+          fullscreenToogle: true,
+          volumePanel: {inline: false}
+        }
+      })
+
+      this.player.on('play', ()=> console.log('Video gestartet'))
+      this.player.on('pause', ()=> console.log('Video gestopt'))
+    }
+  }
+
+  ngOnDestroy(): void {
+      if (this.player) {
+        this.player.disponse();
+      }
   }
 
   getActiveVideo(){
     this.element = this.com.currentElement
     this.currentSource = this.com.currentSource;
     console.log(this.element)
-  }
-
-  seekBackward() {
-    const video = document.querySelector("#target") as HTMLVideoElement;
-    if (video) {
-      video.currentTime -= 5; // 5 Sekunden zurück
-      video.pause(); // Verhindert das Weiterspielen
-    }
-  }
-
-  seekForward() {
-    const video = document.querySelector("#target") as HTMLVideoElement;
-    if (video) {
-      video.currentTime += 5; // 5 Sekunden vor
-      video.pause(); // Verhindert das Weiterspielen
-    }
-  }
-
-  jumpToLastTimestep() {
-    const video = document.querySelector("#target") as HTMLVideoElement;
-    if (video) {
-      video.addEventListener("loadedmetadata", () => {
-        video.currentTime = 400;
-      });
-    }
-  }
-
-  test(){
-    const videoElement = document.querySelector("#target") as HTMLVideoElement;
-    videoElement.addEventListener("seeking", () => {
-    console.log("Seeking activated at:", videoElement.currentTime);
-    });
   }
 
 }

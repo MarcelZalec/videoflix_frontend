@@ -29,6 +29,11 @@ export class AuthService {
         })
       )
   }
+
+  logout() {
+    const storage = sessionStorage;
+    storage.removeItem('token')
+  }
   
   register(user: SignupModel): Observable<Object> {
     return this.http.post(`${Config.FULL_REGISTRATION_URL}`, user).pipe(
@@ -53,5 +58,19 @@ export class AuthService {
       console.error('Request-Fehler:', error);
       throw error;
     }
+  }
+
+  getToken() {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  }
+
+  validateToken(token:string): Observable<any> {
+    const headers = {Authorization: 'Token'+ token};
+    const url = `${Config.STATIC_BASE_URL}`;
+    const body = {token};
+    return this.http.post<any>(url, body , {
+      headers: headers,
+      observe: 'response',
+    });
   }
 }

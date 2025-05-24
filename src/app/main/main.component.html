@@ -19,6 +19,7 @@
         </div>
         }
         @if(this.videos.length != 0) {
+        <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
         <div class="category_cont">
             <div class="video_frame" *ngFor="let category of categorys">
                 <h2>{{category.toUpperCase()}}</h2>

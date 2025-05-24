@@ -10,6 +10,7 @@ export class ComunicationService {
   videos:VideoModel[] = [];
   currentElement:any;
   currentSource = '';
+  // startVideo:any = null;
 
   constructor(
     private dbs: DatabaseService, 
@@ -62,5 +63,15 @@ export class ComunicationService {
         }
       });
     })
+  }
+
+  getStartVideo() {
+    this.getVideos()
+    if (this.videos.length != 0) {
+      // this.startVideo = `${this.videos[0].video_file}`
+      console.log("Das ist das Video", this.videos[0].video_file)
+      return `${this.videos[0].video_file}`
+    }
+    return null
   }
 }
