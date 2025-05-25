@@ -9,18 +9,18 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const token = as.getToken()
   
   if(token) {
-    // try {
-    //   const response = await lastValueFrom(as.validateToken(token))
-    //   if (response.status === 200) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // } catch (error) {
-    //   console.log("Invalid token", error);
-    //   return false
-    // }
-    return true;
+    try {
+      const response = await lastValueFrom(as.validateToken(token))
+      if (response.status === 200) {
+        return true
+      } else {
+        return false
+      }
+    } catch (error) {
+      console.log("Invalid token", error);
+      router.navigateByUrl('login')
+      return false
+    }
   } else {
     router.navigateByUrl('login')
     return false;

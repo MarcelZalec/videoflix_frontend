@@ -1,0 +1,17 @@
+@use './../../../../mixins.scss' as mix;
+@use './../../../../colors.scss' as c;
+
+
+footer {
+    margin-bottom: 20px;
+    padding: 10px;
+    @include mix.flex($g: 48px);
+    a {
+        font-weight: 500;
+        text-decoration: none;
+        color: c.$whiteText;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

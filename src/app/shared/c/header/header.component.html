@@ -1,0 +1,24 @@
+<header>
+    @if(page === 'login') {
+        <div class="frame">
+            <div>
+                <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
+            </div>
+            <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
+        </div>
+    }
+
+    @if(page === 'main') {
+        <div class="frame" [ngClass]="(mainMenu) ? 'd-none': 'flex'">
+            <div>
+                <img (click)="goToMainMenu()" src="./svgs/Symbol.svg" alt="">
+            </div>
+            <button (click)="logout()">
+                <div>
+                    <img src="svgs/logout.svg" alt="">
+                    <span>Log out</span>
+                </div>
+            </button>
+        </div>
+    }
+</header>

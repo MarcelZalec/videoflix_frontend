@@ -4,10 +4,14 @@
 body {
     min-height: 100vh;
     width: 100vw;
-    // background-color: c.$background;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: c.$background;
     color: c.$whiteText;
     display: flex;
     flex-direction: column;
+    z-index: -2;
 }
 
 header {
@@ -28,18 +32,8 @@ header {
     }
 }
 
-button{
-    @include mix.button;
-    div {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-        gap: 4px;
-    }
-}
-
 main {
-    min-height: calc(100vh - 108px);
+    min-height: calc(100vh - 169px);
     min-width: 100%;
     // background-color: c.$background;
     padding: 0px 40px;
@@ -85,7 +79,14 @@ main {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 200px);
     object-fit: cover;
     z-index: -1;
+}
+
+app-footer {
+    margin-right: 40px;
+    :host footer {
+        justify-content: end !important;
+    }
 }

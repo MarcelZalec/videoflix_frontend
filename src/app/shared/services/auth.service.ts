@@ -65,8 +65,8 @@ export class AuthService {
   }
 
   validateToken(token:string): Observable<any> {
-    const headers = {Authorization: 'Token'+ token};
-    const url = `${Config.STATIC_BASE_URL}`;
+    const headers = {Authorization: 'Token '+ token};
+    const url = `${Config.FULL_AUTHORIZATION_URL}`;
     const body = {token};
     return this.http.post<any>(url, body , {
       headers: headers,

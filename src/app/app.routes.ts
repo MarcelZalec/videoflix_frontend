@@ -6,6 +6,8 @@ import { SignUpComponent } from './login/sign-up/sign-up.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { MainComponent } from './main/main.component';
 import { authGuard } from './guards/auth.guard';
+import { ImprintComponent } from './imprint/imprint.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 export const routes: Routes = [
     {
@@ -16,5 +18,7 @@ export const routes: Routes = [
             { path: 'resetPassword', component: ResetPasswordComponent },
         ]
     },
+    { path: 'imprint', component: ImprintComponent},
+    { path: 'privacy', component: PrivacyComponent},
     { path: 'main', component: MainComponent, canActivate: [authGuard]}
 ];

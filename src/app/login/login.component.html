@@ -1,12 +1,5 @@
 <body>
-    <header>
-        <div class="frame">
-            <div>
-                <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
-            </div>
-            <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
-        </div>
-    </header>
+    <app-header [page]="'login'"></app-header>
     @if(startpage) {
         <div class="startpage">
             <h1>Movies, TV shows, and more</h1>
@@ -28,9 +21,6 @@
             <router-outlet></router-outlet>
         </main>
     }
-    <footer>
-        <a routerLink="routeName">Datenschutz</a>
-        <a routerLink="routeName">Impressum</a>
-    </footer>
+    <app-footer></app-footer>
     @if(toastMessage != '') {<app-toastmsg></app-toastmsg>}
 </body>

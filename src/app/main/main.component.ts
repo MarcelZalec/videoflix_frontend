@@ -6,18 +6,21 @@ import { VideoModel } from '../shared/models/video.model';
 import { VideoPlayerComponent } from '../shared/c/video-player/video-player.component';
 import { ComunicationService } from '../shared/services/comunication.service';
 import { AuthService } from '../shared/services/auth.service';
+import { FooterComponent } from '../shared/c/footer/footer.component';
+import { HeaderComponent } from '../shared/c/header/header.component';
 
 @Component({
   selector: 'app-main',
   imports: [
     CommonModule,
     VideoPlayerComponent,
+    FooterComponent,
+    HeaderComponent,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
 export class MainComponent implements OnInit, OnDestroy {
-  mainMenu:boolean = false;
   videos:any[] = [];
   categorys:string[] = [];
   videoSource:string | null = '';
@@ -26,7 +29,6 @@ export class MainComponent implements OnInit, OnDestroy {
     private dbs: DatabaseService,
     private router:Router,
     private com: ComunicationService,
-    private as: AuthService
   ){
     this.getVideoDetails();
   }
@@ -43,15 +45,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
-  }
-
-  logout(){
-    this.as.logout();
-    this.router.navigateByUrl('/login')
-  }
-
-  goToMainMenu(){
-    this.router.navigateByUrl('main')
   }
 
   getVideoDetails(){

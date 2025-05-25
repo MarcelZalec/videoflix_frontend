@@ -1,17 +1,5 @@
 <body>
-    <header>
-        <div class="frame" [ngClass]="(mainMenu) ? 'd-none': 'flex'">
-            <div>
-                <img (click)="goToMainMenu()" src="./svgs/Symbol.svg" alt="">
-            </div>
-            <button (click)="logout()">
-                <div>
-                    <img src="svgs/logout.svg" alt="">
-                    <span>Log out</span>
-                </div>
-            </button>
-        </div>
-    </header>
+    <app-header [page]="'main'"></app-header>
     <main>
         @if(currentSource != '') {
         <div>
@@ -37,4 +25,5 @@
         </div>
         }
     </main>
+    <app-footer></app-footer>
 </body>

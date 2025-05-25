@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { Router, RouterOutlet, RouterModule } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { ToastmsgComponent } from '../shared/c/toastmsg/toastmsg.component';
 import { LittleHelpersService } from '../shared/services/little-helpers.service';
+import { FooterComponent } from '../shared/c/footer/footer.component';
+import { HeaderComponent } from '../shared/c/header/header.component';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterOutlet, NgClass, ReactiveFormsModule, ToastmsgComponent],
+  imports: [RouterOutlet, ReactiveFormsModule, ToastmsgComponent, FooterComponent, HeaderComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
-  loginPage:boolean = false;
+export class LoginComponent implements OnInit {
   startpage:boolean = true;
   errorMessage:boolean = false;
   startForm:FormGroup;
@@ -22,9 +23,20 @@ export class LoginComponent {
     private fb: FormBuilder,
     private lh: LittleHelpersService
   ) {
-    this.checkside();
     this.startForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
+    })
+  }
+
+  ngOnInit(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (this.router.url === '/'){
+          this.startpage = true;
+        } else {
+          this.startpage = false;
+        }
+      }
     })
   }
 
@@ -41,29 +53,6 @@ export class LoginComponent {
 
   goToLogin() {
     this.router.navigateByUrl('login')
-  }
-
-  goToRootPath() {
-    this.router.navigateByUrl('')
-  }
-
-  /**
-  * Checks the current route and updates the page flags accordingly.
-  */
-  checkside() {
-    setInterval(() => {
-      if (this.router.routerState.snapshot.url == '/login') {
-        this.loginPage = true;
-        this.startpage = false
-      } else {
-        if (this.router.routerState.snapshot.url == '/') {
-          this.startpage = true;
-        } else {
-          this.startpage = false;
-        }
-        this.loginPage = false;
-      }
-    },100)
   }
 
   get toastMessage() {
