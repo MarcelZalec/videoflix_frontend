@@ -73,8 +73,8 @@ export class MainComponent implements OnInit, OnDestroy {
     this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
-        videoElement.muted = true;
-        videoElement.autoplay = true;
+      videoElement.muted = true;
+      videoElement.autoplay = true;
     }
   }
 

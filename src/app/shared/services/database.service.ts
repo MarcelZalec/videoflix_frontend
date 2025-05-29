@@ -19,6 +19,12 @@ export class DatabaseService {
     return this.http
       .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`)
       .pipe(
+        map((videos) =>
+          videos.map(video => ({
+            ...video,
+            thumbnail: `${Config.MEDIA_URL}${video.thumbnail}`
+          }))
+        ),
         tap((v) => {
           this.videoSubject.next(v);
         }),

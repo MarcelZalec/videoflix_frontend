@@ -10,6 +10,7 @@ export class ComunicationService {
   videos:VideoModel[] = [];
   currentElement:any;
   currentSource = '';
+  resulution = '720p';
   // startVideo:any = null;
 
   constructor(
@@ -32,9 +33,8 @@ export class ComunicationService {
   }
 
   setVideoPath(path:string): string{
-    const replacePath = path.replace('', '')
-    // this.currentSource = `${Config.STATIC_BASE_URL}media/${path}`;
-    return `${Config.STATIC_BASE_URL}media/${path}`;
+    const updated_path = path.replace('.mp4', `_${this.resulution}_hls/index.m3u8`)
+    return `${Config.MEDIA_URL}${updated_path}`;
   }
 
   setactiveVideoX(id:number) {
@@ -58,6 +58,7 @@ export class ComunicationService {
           this.currentElement = element
           let file = this.setVideoPath(element.video_file)
           this.currentSource = file
+          // console.log("Aktiver Video abs. Pfad ===", this.currentSource, element.thumbnail)
         } else {
           console.warn("Kein Video mit der ID gefunden", element)
         }
@@ -73,5 +74,9 @@ export class ComunicationService {
       return `${this.videos[0].video_file}`
     }
     return null
+  }
+
+  clearVideo() {
+    this.currentSource = '';
   }
 }
