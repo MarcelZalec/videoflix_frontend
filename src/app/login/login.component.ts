@@ -6,6 +6,7 @@ import { ToastmsgComponent } from '../shared/c/toastmsg/toastmsg.component';
 import { LittleHelpersService } from '../shared/services/little-helpers.service';
 import { FooterComponent } from '../shared/c/footer/footer.component';
 import { HeaderComponent } from '../shared/c/header/header.component';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private lh: LittleHelpersService
+    private lh: LittleHelpersService,
+    private as: AuthService,
   ) {
     this.startForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -38,6 +40,10 @@ export class LoginComponent implements OnInit {
         }
       }
     })
+
+    if (this.as.autoLogin()) {
+      this.router.navigateByUrl('main')
+    }
   }
 
   goToSignUp(){

@@ -8,12 +8,11 @@
 body {
     min-height: 100vh;
     min-width: 100vw;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
     background-color: c.$background;
     color: c.$whiteText;
-    display: flex;
     flex-direction: column;
     z-index: -2;
     align-items: center;
@@ -91,8 +90,8 @@ main {
 }
 
 app-footer {
+    width: 100%;
+    display: flex;
+    justify-content: end;
     margin-right: 40px;
-    :host footer {
-        justify-content: end !important;
-    }
 }

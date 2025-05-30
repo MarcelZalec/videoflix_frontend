@@ -34,9 +34,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.videoElement && this.videoElement.nativeElement) {
       this.player = videojs(this.videoElement.nativeElement, {
         ...this.videoOptions,
-        controles: true,
+        controls: true,
+        poster: this.element.thumbnail,
         html5: {
         vhs: {
+          overrideNative: true,
           enableLowInitialPlaylist: true,
           useDevicePixelRatio: false,
           smoothQualityChange: true,
@@ -49,7 +51,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       ],
         controlBar: {
-          fullscreenToogle: true,
+          fullscreenToggle: false,
           volumePanel: {inline: false},
           pictureInPictureToggle: false,
         }
@@ -57,6 +59,13 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.player.on('play', ()=> console.log('Video gestartet'))
       this.player.on('pause', ()=> console.log('Video gestopt'))
+
+      this.player.on('error', () => console.error('Video.js error:', this.player?.error()));
+
+      this.player.ready(() => {
+        console.log('Player ready, loading source:', this.currentSource);
+        this.player?.load();
+      });
     }
   }
 
@@ -68,7 +77,9 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getActiveVideo(){
     this.element = this.com.currentElement
+    // this.currentSource = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
     this.currentSource = this.com.currentSource;
+    // console.log(this.element)
     // console.log(this.element)
   }
 

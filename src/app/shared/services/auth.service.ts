@@ -32,7 +32,9 @@ export class AuthService {
 
   logout() {
     const storage = sessionStorage;
+    const storage2 = localStorage;
     storage.removeItem('token')
+    storage2.removeItem('token')
   }
   
   register(user: SignupModel): Observable<Object> {
@@ -72,5 +74,18 @@ export class AuthService {
       headers: headers,
       observe: 'response',
     });
+  }
+
+  autoLogin() {
+    const token = localStorage.getItem('token')
+    if (token != null) {
+      if(this.validateToken(token)) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
   }
 }

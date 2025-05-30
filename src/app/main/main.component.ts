@@ -2,10 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
-import { VideoModel } from '../shared/models/video.model';
-import { VideoPlayerComponent } from '../shared/c/video-player/video-player.component';
 import { ComunicationService } from '../shared/services/comunication.service';
-import { AuthService } from '../shared/services/auth.service';
 import { FooterComponent } from '../shared/c/footer/footer.component';
 import { HeaderComponent } from '../shared/c/header/header.component';
 
@@ -13,7 +10,6 @@ import { HeaderComponent } from '../shared/c/header/header.component';
   selector: 'app-main',
   imports: [
     CommonModule,
-    VideoPlayerComponent,
     FooterComponent,
     HeaderComponent,
   ],
@@ -66,6 +62,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   setActiveVideo(id:number){
     this.com.setactiveVideo(id)
+    this.router.navigateByUrl('video')
   }
 
   setStartVideo() {
