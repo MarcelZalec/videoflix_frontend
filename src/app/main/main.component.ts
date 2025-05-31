@@ -18,6 +18,7 @@ import { HeaderComponent } from '../shared/c/header/header.component';
 })
 export class MainComponent implements OnInit, OnDestroy {
   videos:any[] = [];
+  latestVideos:any[] = [];
   categorys:string[] = [];
   videoSource:string | null = '';
 
@@ -56,6 +57,7 @@ export class MainComponent implements OnInit, OnDestroy {
         if (!this.categorys.includes(obj.category)) {
           this.categorys.push(obj.category)
         }
+        this.latestVideos = this.videos
       })
     })
   }
@@ -66,8 +68,13 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   setStartVideo() {
+    if (this.currentSource == '') {
+      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    } else {
+      this.videoSource = this.currentSource
+    }
     // this.videoSource = this.com.getStartVideo();
-    this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    // this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
       videoElement.muted = true;

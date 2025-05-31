@@ -20,6 +20,7 @@ main {
   height: 100%;
   background-color: #181818;
   overflow: hidden;
+  position: relative;
 
   .vjs-control-bar {
     background: rgba(0, 0, 0, 0.7);
@@ -27,10 +28,20 @@ main {
     padding: 8px;
   }
 
+  .vjs-tech {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   .vjs-play-control,
   .vjs-volume-panel,
   .vjs-fullscreen-control {
-    color: #ffffff;
+    color: #00ff00;
+    // color: #ffffff;
     transition: all 0.3s ease-in-out;
 
     &:hover {
@@ -52,4 +63,14 @@ main {
       background: rgba(255, 255, 255, 0.4);
     }
   }
+
+  .vjs-big-play-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #00ff00;
+    color: #ffcc00;
+    cursor: pointer;
+  }
+
 }

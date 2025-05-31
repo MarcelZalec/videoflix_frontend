@@ -35,7 +35,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       this.player = videojs(this.videoElement.nativeElement, {
         ...this.videoOptions,
         controls: true,
-        poster: this.element.thumbnail,
+        // poster: this.element.thumbnail,
         html5: {
         vhs: {
           overrideNative: true,
@@ -52,7 +52,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       ],
         controlBar: {
           fullscreenToggle: false,
-          volumePanel: {inline: false},
+          volumePanel: {inline: true},
           pictureInPictureToggle: false,
         }
       })
@@ -79,8 +79,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.element = this.com.currentElement
     // this.currentSource = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
     this.currentSource = this.com.currentSource;
-    // console.log(this.element)
-    // console.log(this.element)
   }
 
 }
