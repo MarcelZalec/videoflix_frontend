@@ -1,7 +1,8 @@
 <main>
+    <app-header id="head" class="" [page]="'video'"></app-header>
     <video 
         #target
-        class="video-js vjs-default-skin custom-theme"
+        class="vjs-custom-theme video-js vjs-default-skin"
         controls
         preload="auto"
     ></video>
@@ -11,3 +12,6 @@
 <!-- poster="element.thumbnail"   metadata     playsinline  src="{{currentSource}}"  custom-theme   controls-->
 
 <!-- (click)="setactiveVideo(1)" -->
+
+<!-- <button id="skipBackward">⏪ 10s zurück</button>
+<button id="skipForward">⏩ 10s vor</button> -->

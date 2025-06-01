@@ -6,6 +6,9 @@
     max-width: 1440px;
     @include mix.flex($j: space-between);
     padding: 10px 96px;
+    img:hover {
+        cursor: pointer;
+    }
 }
 
 button{
@@ -16,4 +19,10 @@ button{
         text-align: center;
         gap: 4px;
     }
+}
+
+.video {
+    padding: 10px 30px;
+    max-width: unset;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
 }

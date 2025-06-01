@@ -21,4 +21,13 @@
             </button>
         </div>
     }
+
+    @if(page === 'video') {
+        <div class="frame video">
+            <div>
+                <img (click)="goToRootPath()" src="./svgs/arrow_back.svg" alt="">
+            </div>
+            <img src="./svgs/Symbol.svg" alt="">
+        </div>
+    }
 </header>
