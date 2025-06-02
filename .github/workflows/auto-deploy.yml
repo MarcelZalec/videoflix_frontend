@@ -1,0 +1,41 @@
+name: Deploy Angular Frontend to Server
+
+on:
+    push: 
+        branches: 
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '18'
+
+        - name: Install Dependencies and Build Angular App
+          run: |
+            npm ci
+            npm run build --configuration=production
+
+        - name: htaccess!
+          run: |
+            cp src/.htaccess dist/videoflix/browser/
+
+
+        - name: 📂 Sync files
+          uses: SamKirkland/FTP-Deploy-Action@4.3.1
+          with:
+            server: videoflix.marcelzalec.at
+            username: ${{ secrets.USERNAME }}
+            password: ${{ secrets.PASSWORD }}
+            port: 21
+            protocol: ftps
+            local-dir: ./dist/videoflix/browser/
+            server-dir: /
+            concurrent-uploads: 2
