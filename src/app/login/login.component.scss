@@ -1,6 +1,5 @@
-@use "./../../colors.scss" as c;
-@use "./../../mixins.scss" as mix;
-@use "./../app.component.scss";
+@use "./../../styles/colors.scss" as c;
+@use "./../../styles/mixins.scss" as mix;
 
 *{
     font-size: 18px;

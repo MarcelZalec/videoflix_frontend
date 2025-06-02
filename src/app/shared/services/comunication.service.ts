@@ -32,7 +32,10 @@ export class ComunicationService {
     })
   }
 
-  setVideoPath(path:string): string{
+  setVideoPath(path:string, replace:boolean = true): string{
+    if (!replace) {
+      return `${Config.MEDIA_URL}${path}`;
+    }
     const updated_path = path.replace('.mp4', `_${this.resulution}_hls/index.m3u8`)
     return `${Config.MEDIA_URL}${updated_path}`;
   }

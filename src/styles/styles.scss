@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@use "./colors.scss" as colors;
+@use "./colors.scss" as c;
+@use './ov.scss';
+@use './scrollbar.scss';
+
 *{
     margin: 0px;
     box-sizing: border-box;
@@ -9,16 +12,12 @@ body {
     display: flex;
     justify-content: center;
     cursor: default;
+    overflow-x: hidden;
     body {
         max-width: 1920px;
         // max-height: 1080px;
     }
     font-family: 'DM Sans';
-}
-
-h1 {
-    font-weight: 700;
-    line-height: 100%;
 }
 
 .flex {
@@ -30,11 +29,19 @@ h1 {
 }
 
 input::placeholder {
-    color: colors.$utilityWhite;
+    color: c.$utilityWhite;
 }
 
 .errormsg {
-    color: colors.$error !important;
+    color: c.$error !important;
+}
+
+.input_with_errorcont {
+    position: relative;
+}
+
+.errorcont {
+    position: absolute;
 }
 
 app-sign-in,
@@ -51,13 +58,13 @@ app-toastmsg {
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../public/fonts/dm-sans-v15-latin-500.woff2') format('truetype');
+    src: url('./../../public/fonts/dm-sans-v15-latin-500.woff2') format('truetype');
 }
 @font-face {
     font-family: 'DM Sans';
-    src: url('../public/fonts/dm-sans-v15-latin-700.woff2') format('truetype');
+    src: url('./../../public/fonts/dm-sans-v15-latin-700.woff2') format('truetype');
 }
 @font-face {
     font-family: 'DM Sans';
-    src: url('../public/fonts/dm-sans-v15-latin-regular.woff2') format('truetype');
+    src: url('./../../public/fonts/dm-sans-v15-latin-regular.woff2') format('truetype');
 }
