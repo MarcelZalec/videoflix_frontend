@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Wenn Datei oder Verzeichnis existiert, normal ausliefern
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Andernfalls index.html zurückgeben (für Angular)
+  RewriteRule ^ index.html [L]
+</IfModule>
