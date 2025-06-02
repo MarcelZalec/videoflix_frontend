@@ -1,17 +1,26 @@
 <body>
-    <header>
-        <div class="frame">
-            <div>
-                <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
-            </div>
-            <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
+    <app-header [page]="'login'"></app-header>
+    @if(startpage) {
+        <div class="startpage">
+            <h1>Movies, TV shows, and more</h1>
+            <span>Enter your email to create or restart your subscription.</span>
+            <form class="form" action="login()" [formGroup]="startForm">
+                <div class="input_with_errorcont">
+                    <div class="input">
+                        <input type="text" formControlName="email" placeholder="Email Address">
+                    </div>
+                </div>
+                <button (click)="goToSignUp()">
+                    <span>Sign Up</span>
+                    <img src="svgs/chevron_right.svg" alt="">
+                </button>
+            </form>
         </div>
-    </header>
-    <main>
-        <router-outlet></router-outlet>
-    </main>
-    <footer>
-        <a routerLink="routeName">Datenschutz</a>
-        <a routerLink="routeName">Impressum</a>
-    </footer>
+    }@else {
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    }
+    <app-footer></app-footer>
+    @if(toastMessage != '') {<app-toastmsg></app-toastmsg>}
 </body>

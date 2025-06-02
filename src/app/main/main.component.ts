@@ -1,30 +1,89 @@
-import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
+import { ComunicationService } from '../shared/services/comunication.service';
+import { FooterComponent } from '../shared/c/footer/footer.component';
+import { HeaderComponent } from '../shared/c/header/header.component';
 
 @Component({
   selector: 'app-main',
-  imports: [NgClass],
+  imports: [
+    CommonModule,
+    FooterComponent,
+    HeaderComponent,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent {
-  mainMenu:boolean = false;
+export class MainComponent implements OnInit, OnDestroy {
+  videos:any[] = [];
+  latestVideos:any[] = [];
+  categorys:string[] = [];
+  videoSource:string | null = '';
 
   constructor(
     private dbs: DatabaseService,
-    private router:Router
+    private router:Router,
+    private com: ComunicationService,
   ){
-    this.dbs.get()
+    this.getVideoDetails();
   }
 
-  logout(){
-    this.router.navigateByUrl('')
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.videos = [];
+    this.categorys = [];
+    this.dbs.loadVideos();
+    this.setStartVideo();
   }
 
-  goToMainManu(){
-    this.router.navigateByUrl('main')
+  ngOnDestroy(): void {
+
+  }
+
+  getVideoDetails(){
+    this.dbs.videos$.subscribe((v) => {
+      v.forEach((obj) => {
+        let data = {
+          id:obj.id,
+          title:obj.title,
+          thumbnail:obj.thumbnail,
+          category:obj.category,
+        }
+        this.videos.push(data)
+        if (!this.categorys.includes(obj.category)) {
+          this.categorys.push(obj.category)
+        }
+        this.latestVideos = this.videos
+      })
+    })
+  }
+
+  setActiveVideo(id:number){
+    this.com.setactiveVideo(id)
+    this.router.navigateByUrl('video')
+  }
+
+  setStartVideo() {
+    if (this.currentSource == '') {
+      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    } else {
+      this.videoSource = this.currentSource
+    }
+    // this.videoSource = this.com.getStartVideo();
+    // this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
+    if (videoElement) {
+      videoElement.muted = true;
+      videoElement.autoplay = true;
+    }
+  }
+
+  get currentSource() {
+    return this.com.currentSource
   }
 
 }

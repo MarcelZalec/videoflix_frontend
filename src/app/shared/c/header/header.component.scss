@@ -1,0 +1,28 @@
+@use './../../../../mixins.scss' as mix;
+
+.frame {
+    width: 100vw;
+    height: 108px;
+    max-width: 1440px;
+    @include mix.flex($j: space-between);
+    padding: 10px 96px;
+    img:hover {
+        cursor: pointer;
+    }
+}
+
+button{
+    @include mix.button;
+    div {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        gap: 4px;
+    }
+}
+
+.video {
+    padding: 10px 30px;
+    max-width: unset;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+}

@@ -8,9 +8,10 @@
 body {
     display: flex;
     justify-content: center;
+    cursor: default;
     body {
         max-width: 1920px;
-        max-height: 1080px;
+        // max-height: 1080px;
     }
     font-family: 'DM Sans';
 }
@@ -28,12 +29,24 @@ h1 {
     display: none;
 }
 
+input::placeholder {
+    color: colors.$utilityWhite;
+}
+
+.errormsg {
+    color: colors.$error !important;
+}
+
 app-sign-in,
 app-sign-up,
 app-forget-password,
 app-reset-password {
     width: 100%;
     background-color: unset;
+}
+
+app-toastmsg {
+    position: absolute;
 }
 
 @font-face {

@@ -1,9 +1,9 @@
 <div>
     <h1>Sign Up</h1>
-    <form class="form" action="login()" [formGroup]="signUpForm">
+    <form class="form" [formGroup]="signUpForm">
         <div class="input">
             <img src="svgs\mail.svg" alt="">
-            <input type="text" formControlName="email" placeholder="Enter a password">
+            <input type="text" formControlName="email" placeholder="Email Address">
         </div>
         <div class="input">
             <img src="svgs\password.svg" alt="">
@@ -13,7 +13,7 @@
         </div>
         <div class="input">
             <img src="svgs\password.svg" alt="">
-            <input id="passwordField2" [type]="lh.passwordFields[1].inputType" formControlName="password" placeholder="Confirm Password">
+            <input id="passwordField2" [type]="lh.passwordFields[1].inputType" formControlName="password2" placeholder="Confirm Password">
             <img (click)="lh.changeVisibility(1)" class="passowordVisibility" [src]="lh.passwordFields[1].src" alt="">
         </div>
     </form>
