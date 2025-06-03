@@ -7,12 +7,16 @@
         </div>
         } -->
         <div class="main_head">
-            <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
-            <img id="backgroundImg" [src]="imgSource" alt="">
-            <div class="new_on_videoflix">
+            @if(videoSource != '') {
+                <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
+            }
+            @if(imgSource != '') {
+                <img id="backgroundImg" [src]="imgSource" alt="">
+            }
+            <div class="new_on_videoflix" (mouseleave)="clearStartVideo()">
                 <h2>New on Videoflix</h2>
                     @for(v of latestVideos; track v) {
-                        <div class="s_video" (click)="setActiveVideo(v.id)" (mouseenter)="setStartVideo(v.id)">
+                        <div class="s_video" (mouseenter)="setStartVideo(v.id)">
                             <img (click)="setActiveVideo(v.id)" [src]="v.thumbnail" alt="">
                         </div>
                     }
@@ -26,7 +30,7 @@
                         @if(video.category === category) {
                         <div class="s_video" (click)="setActiveVideo(video.id)" (mouseenter)="setStartVideo(video.id)">
                             <h5>{{ video.title }}</h5>
-                            <img (click)="setActiveVideo(video.id)" [src]="video.thumbnail" alt="">
+                            <img [src]="video.thumbnail" alt="">
                         </div>
                         }
                     }

@@ -10,7 +10,7 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './video-player.component.html',
   styleUrl: './video-player.component.scss'
 })
-export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   @ViewChild('target', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
   @Input() videoOptions!: { sources: { src: string; type: string }[] };
   private mouseMoveListener!: (event: MouseEvent) => void;
@@ -29,11 +29,8 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     document.addEventListener('mousemove', this.mouseMoveListener)
   }
 
-  ngOnInit(): void {
-
-  }
-
   ngAfterViewInit(): void {
+    this.checkStorage();
     this.initializePlayer();
   }
 
@@ -65,7 +62,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
             forward: 10, // 10 Sekunden vorwärts
             backward: 10 // 10 Sekunden zurück
           },
-        }
+        },
       })
 
       // // Skip-Funktionen
@@ -82,25 +79,33 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
       this.player.on('pause', ()=> {})
 
       this.player.on('error', () => console.error('Video.js error:', this.player?.error()));
+      this.player.on('volumechange', () => {
+        const currentVolume = this.player.volume();
+        if (currentVolume) {
+          localStorage.setItem('videoVolume', currentVolume.toString())
+        }
+      })
 
       this.player.ready(() => {
-        console.log('Player ready, loading source:', this.currentSource);
+        this.setAndGetCurrentTime(false);
+        this.player.volume(parseFloat(localStorage.getItem('videoVolume') || '0.5'))
         this.player.load();
-        console.log('Remaining Time', this.player.remainingTime())
       });
     }
   }
 
   ngOnDestroy(): void {
     document.removeEventListener('mousemove', this.mouseMoveListener)
-      if (this.player) {
-        this.player.dispose();
-      }
+    this.setAndGetCurrentTime();
+    if (this.player) {
+      this.player.dispose();
+    }
+    sessionStorage.removeItem('current_video')
+    sessionStorage.removeItem('title_video')
   }
 
   getActiveVideo(){
     this.element = this.com.currentElement
-    // this.currentSource = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
     this.currentSource = this.com.currentSource;
   }
 
@@ -120,6 +125,24 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         header.classList.remove('fadeIn'); // Entfernt die Einblend-Animation
         header.classList.add('fadeOut'); // Fügt die Ausblend-Animation hinzu
       }, 2000);
+    }
+  }
+
+  checkStorage() {
+    let video = sessionStorage.getItem('current_video')
+    if (video !== null) {
+      this.currentSource = video
+    }
+  }
+
+  setAndGetCurrentTime(get:boolean = true) {
+    let time = this.player.currentTime()
+    if (get && time) {
+      let strTime = time.toString()
+      sessionStorage.setItem('current_time_video', strTime)
+    } else {
+      let t = sessionStorage.getItem('current_time_video')
+      this.player.currentTime(`${t}`)
     }
   }
 

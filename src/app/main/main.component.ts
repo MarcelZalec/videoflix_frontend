@@ -71,24 +71,24 @@ export class MainComponent implements OnInit, OnDestroy {
 
   setStartVideo(id?:number) {
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
-    if (id) {
-      let index = this.videos.findIndex((vid) => vid.id === id)
-      // this.imgSource = this.videos[index].thumbnail
-      this.videoSource = this.com.setVideoPath(this.videos[index].video, false)
-    } else {
-      
-    }
-    // if (this.currentSource == '') {
-    //   this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
-    // } else {
-    //   this.videoSource = this.currentSource
-    // }
-    // this.videoSource = this.com.getStartVideo();
-    this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
     if (videoElement) {
       videoElement.muted = true;
       videoElement.autoplay = true;
     }
+    if (id) {
+      let index = this.videos.findIndex((vid) => vid.id === id)
+      this.imgSource = this.videos[index].thumbnail
+      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false)
+      this.videoSource = ''
+    } else {
+      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    }
+  }
+
+  clearStartVideo() {
+    this.videoSource = '';
+    this.imgSource = '';
+    this.setStartVideo()
   }
 
   get currentSource() {
