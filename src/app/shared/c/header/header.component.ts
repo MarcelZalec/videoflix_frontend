@@ -15,12 +15,15 @@ export class HeaderComponent implements OnInit {
   loginPage:boolean = false;
   mainMenu:boolean = false;
   title:string = ''
+  screenWidth!:number;
 
   constructor(
     private router: Router,
     private as: AuthService,
     private com: ComunicationService,
-  ) {}
+  ) {
+    this.checkScreenWith();
+  }
 
   ngOnInit(): void {
       this.router.events.subscribe(event => {
@@ -63,5 +66,9 @@ export class HeaderComponent implements OnInit {
     } else if (this.title == '') {
       this.title = sessionStorage.getItem('title_video') as string
     }
+  }
+
+  checkScreenWith() {
+    this.screenWidth = screen.width
   }
 }

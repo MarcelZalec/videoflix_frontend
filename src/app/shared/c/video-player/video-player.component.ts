@@ -141,7 +141,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
       let strTime = time.toString()
       sessionStorage.setItem('current_time_video', strTime)
     } else {
-      let t = sessionStorage.getItem('current_time_video')
+      let t = sessionStorage.getItem('current_time_video') || 0
       this.player.currentTime(`${t}`)
     }
   }

@@ -1,5 +1,6 @@
 @use './../../../../styles/mixins.scss' as mix;
 @use './../../../../styles/colors.scss' as c;
+@use './../../../../styles/responsive.scss';
 
 .frame {
     width: 100vw;

@@ -78,7 +78,7 @@ export class MainComponent implements OnInit, OnDestroy {
     if (id) {
       let index = this.videos.findIndex((vid) => vid.id === id)
       this.imgSource = this.videos[index].thumbnail
-      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false)
+      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false) // funktioniert weiß nur nicht ob ich das so mache
       this.videoSource = ''
     } else {
       this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
