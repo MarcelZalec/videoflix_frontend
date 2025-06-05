@@ -2,7 +2,7 @@
     @if(page === 'login' || page === 'imprint') {
         <div class="frame">
             <div>
-                @if(screenWidth < 500) {
+                @if(screenWidth < 500 && page !== 'imprint') {
                     <img (click)="goToRootPath()" src="./svgs/Symbol.svg" alt="">
                 }@else {
                     <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">

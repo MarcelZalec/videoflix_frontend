@@ -20,6 +20,7 @@ export class LittleHelpersService {
   private toastSubject = new Subject<ToastMessage>();
   toast$ = this.toastSubject.asObservable();
   toastSignal = signal<string>('');
+  screenWidth!:number;
 
   changeVisibility(index:number) {
     const field = this.passwordFields[index];
@@ -45,5 +46,9 @@ export class LittleHelpersService {
     setTimeout(() => {
       this.toastSignal.set('');
     }, 2500);
+  }
+
+  checkScreenWith() {
+    return screen.width
   }
 }

@@ -5,6 +5,7 @@ import { DatabaseService } from '../shared/services/database.service';
 import { ComunicationService } from '../shared/services/comunication.service';
 import { FooterComponent } from '../shared/c/footer/footer.component';
 import { HeaderComponent } from '../shared/c/header/header.component';
+import { LittleHelpersService } from '../shared/services/little-helpers.service';
 
 @Component({
   selector: 'app-main',
@@ -27,6 +28,7 @@ export class MainComponent implements OnInit, OnDestroy {
     private dbs: DatabaseService,
     private router:Router,
     private com: ComunicationService,
+    private lh: LittleHelpersService,
   ){
     this.getVideoDetails();
   }
@@ -93,6 +95,10 @@ export class MainComponent implements OnInit, OnDestroy {
 
   get currentSource() {
     return this.com.currentSource
+  }
+
+  get screenwidth() {
+    return this.lh.checkScreenWith()
   }
 
 }

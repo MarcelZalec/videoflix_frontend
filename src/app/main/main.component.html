@@ -7,7 +7,7 @@
         </div>
         } -->
         <div class="main_head">
-            @if(videoSource != '') {
+            @if(videoSource != '' && screenwidth > 500) {
                 <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
             }
             @if(imgSource != '') {
