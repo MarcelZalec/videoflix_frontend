@@ -83,6 +83,17 @@
     
 }
 
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translatey(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translatey(0%);
+  }
+}
+
 @media (max-width: 500px) {
     .toastCont {
         bottom: 0;
@@ -91,7 +102,9 @@
         border-bottom-left-radius: 0px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        min-height: 230px;
+        max-height: 230px;
+        height: 80px;
+        animation: slideInFromBottom 0.5s ease-out forwards, slideInFromBottom 0.5s ease-out reverse 2s;
     }
 
     .redCont {
