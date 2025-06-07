@@ -1,7 +1,7 @@
 @use './../../../../../node_modules/video.js/src/css/icons';
-@use './../../../../mixins.scss' as mix;
-@use './../../../../colors.scss' as c;
-@use './../../../../animations.scss';
+@use './../../../../styles/mixins.scss' as mix;
+@use './../../../../styles/colors.scss' as c;
+@use './../../../../styles/animations.scss';
 
 main {
   width: 100vw;

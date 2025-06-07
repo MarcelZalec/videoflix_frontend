@@ -38,4 +38,5 @@ jobs:
             protocol: ftps
             local-dir: ./dist/videoflix/browser/
             server-dir: /
+            timeout: 190000
             concurrent-uploads: 2

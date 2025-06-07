@@ -1,6 +1,5 @@
-@use "./../../colors.scss" as c;
-@use "./../../mixins.scss" as mix;
-@use "./../app.component.scss";
+@use "./../../styles/colors.scss" as c;
+@use "./../../styles/mixins.scss" as mix;
 
 *{
     font-size: 18px;
@@ -36,8 +35,6 @@ button {
 }
 
 .form {
-    font-size: 18px;
-    font-weight: 400;
     width: 100%;
 }
 

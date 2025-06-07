@@ -1,0 +1,53 @@
+@media (max-width: 500px) {
+    .startpage {
+        text-align: center;
+        padding: 0px 20px;
+        .form {
+            flex-direction: column !important;
+        }
+        .input {
+            width: 90% !important;
+        }
+    }
+
+    .input_with_errorcont {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .frame {
+        padding: 10px 10px !important;
+    }
+
+    main {
+        width: 100% !important;
+        padding: 30px 10px !important;
+    }
+
+    .main_head {
+        margin-top: 90px;
+        height: 100% !important;
+    }
+
+    .new_on_videoflix {
+        min-height: unset !important;
+        padding: 0px 10px !important;
+    }
+
+    .category_cont {
+        padding: 0px 10px !important;
+    }
+
+    .s_video {
+        width: 170.5px !important;
+        height: 96px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .new {
+        flex-direction: column;
+        gap: 4px;
+    }
+}

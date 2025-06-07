@@ -1,10 +1,19 @@
 <header>
-    @if(page === 'login') {
+    @if(page === 'login' || page === 'imprint') {
         <div class="frame">
             <div>
-                <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
+                @if(screenWidth < 500 && page !== 'imprint') {
+                    <img (click)="goToRootPath()" src="./svgs/Symbol.svg" alt="">
+                }@else {
+                    <img (click)="goToRootPath()" src="./svgs/Logo.svg" alt="">
+                }
             </div>
-            <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
+
+            @if(page === 'login') {
+                <button [ngClass]="(loginPage) ? 'd-none': 'flex'" (click)="goToLogin()">Log in</button>
+            }@else {
+                <img (click)="goToRootPath()" src="./svgs/arrow_back.svg" alt="">
+            }
         </div>
     }
 
@@ -27,6 +36,7 @@
             <div>
                 <img (click)="goToRootPath()" src="./svgs/arrow_back.svg" alt="">
             </div>
+            <h2 class="title">{{ title }}</h2>
             <img src="./svgs/Symbol.svg" alt="">
         </div>
     }

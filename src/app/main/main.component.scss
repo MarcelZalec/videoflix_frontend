@@ -1,5 +1,5 @@
-@use "./../../colors.scss" as c;
-@use "./../../mixins.scss" as mix;
+@use "./../../styles/colors.scss" as c;
+@use "./../../styles/mixins.scss" as mix;
 
 *{
     max-width: 1920px;
@@ -60,8 +60,8 @@ main {
 }
 
 .s_video {
-    width: 250px;
-    height: 150px;
+    width: 213px;
+    height: 120px;
     // background-color: gray;
     position: relative;
     &:hover {
@@ -85,6 +85,16 @@ main {
     top: 0;
     left: 0;
     // transform: translateX(-50%);
+    width: 100vw;
+    height: calc(100vh - 200px);
+    object-fit: cover;
+    z-index: -1;
+}
+
+#backgroundImg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: calc(100vh - 200px);
     object-fit: cover;

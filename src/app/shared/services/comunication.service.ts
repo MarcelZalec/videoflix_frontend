@@ -32,23 +32,13 @@ export class ComunicationService {
     })
   }
 
-  setVideoPath(path:string): string{
+  setVideoPath(path:string, replace:boolean = true): string{
     const updated_path = path.replace('.mp4', `_${this.resulution}_hls/index.m3u8`)
-    return `${Config.MEDIA_URL}${updated_path}`;
-  }
-
-  setactiveVideoX(id:number) {
-    if (this.videos.length === 0) {
-      console.error("Keine Videos geladen – kann kein aktives Video setzen!");
-      return;
+    if (!replace) {
+      return `${Config.MEDIA_URL}${path}`;
+    } else {
+      return `${Config.MEDIA_URL}${updated_path}`;
     }
-    let video = this.videos.filter(v => v.id == id);
-    if (video.length != 1) {
-      console.error("Video-Liste hat die falsche Länge!", video.length);
-      return;
-    }
-    this.currentSource = video[0].video_file;
-    console.log(video);
   }
 
   setactiveVideo(id:number) {
@@ -58,7 +48,8 @@ export class ComunicationService {
           this.currentElement = element
           let file = this.setVideoPath(element.video_file)
           this.currentSource = file
-          // console.log("Aktiver Video abs. Pfad ===", this.currentSource, element.thumbnail)
+          sessionStorage.setItem('current_video', this.currentSource)
+          sessionStorage.setItem('title_video', this.currentElement.title)
         } else {
           console.warn("Kein Video mit der ID gefunden", element)
         }

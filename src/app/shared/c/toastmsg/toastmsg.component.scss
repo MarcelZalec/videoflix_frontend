@@ -1,5 +1,5 @@
-@use "./../../../../colors.scss" as c;
-@use "./../../../../mixins.scss" as mix;
+@use "./../../../../styles/colors.scss" as c;
+@use "./../../../../styles/mixins.scss" as mix;
 
 .toastCont {
     position: fixed;
@@ -81,4 +81,43 @@
         padding-right: 10px;
     }
     
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translatey(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translatey(0%);
+  }
+}
+
+@media (max-width: 500px) {
+    .toastCont {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        max-height: 230px;
+        height: 80px;
+        animation: slideInFromBottom 0.5s ease-out forwards, slideInFromBottom 0.5s ease-out reverse 2s;
+    }
+
+    .redCont {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 16px;
+        min-height: unset;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 20px;
+    }
+
+    .line {
+        display: none !important;
+    }
 }

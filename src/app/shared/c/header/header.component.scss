@@ -1,4 +1,6 @@
-@use './../../../../mixins.scss' as mix;
+@use './../../../../styles/mixins.scss' as mix;
+@use './../../../../styles/colors.scss' as c;
+@use './../../../../styles/responsive.scss';
 
 .frame {
     width: 100vw;
@@ -25,4 +27,8 @@ button{
     padding: 10px 30px;
     max-width: unset;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.title {
+    color: c.$whiteText;
 }

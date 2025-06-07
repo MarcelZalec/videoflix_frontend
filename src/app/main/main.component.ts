@@ -5,6 +5,7 @@ import { DatabaseService } from '../shared/services/database.service';
 import { ComunicationService } from '../shared/services/comunication.service';
 import { FooterComponent } from '../shared/c/footer/footer.component';
 import { HeaderComponent } from '../shared/c/header/header.component';
+import { LittleHelpersService } from '../shared/services/little-helpers.service';
 
 @Component({
   selector: 'app-main',
@@ -21,11 +22,13 @@ export class MainComponent implements OnInit, OnDestroy {
   latestVideos:any[] = [];
   categorys:string[] = [];
   videoSource:string | null = '';
+  imgSource:string | null = '';
 
   constructor(
     private dbs: DatabaseService,
     private router:Router,
     private com: ComunicationService,
+    private lh: LittleHelpersService,
   ){
     this.getVideoDetails();
   }
@@ -52,6 +55,7 @@ export class MainComponent implements OnInit, OnDestroy {
           title:obj.title,
           thumbnail:obj.thumbnail,
           category:obj.category,
+          video:obj.video_file
         }
         this.videos.push(data)
         if (!this.categorys.includes(obj.category)) {
@@ -67,23 +71,34 @@ export class MainComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('video')
   }
 
-  setStartVideo() {
-    if (this.currentSource == '') {
-      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
-    } else {
-      this.videoSource = this.currentSource
-    }
-    // this.videoSource = this.com.getStartVideo();
-    // this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+  setStartVideo(id?:number) {
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
       videoElement.muted = true;
       videoElement.autoplay = true;
     }
+    if (id) {
+      let index = this.videos.findIndex((vid) => vid.id === id)
+      this.imgSource = this.videos[index].thumbnail
+      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false) // funktioniert weiß nur nicht ob ich das so mache
+      this.videoSource = ''
+    } else {
+      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    }
+  }
+
+  clearStartVideo() {
+    this.videoSource = '';
+    this.imgSource = '';
+    this.setStartVideo()
   }
 
   get currentSource() {
     return this.com.currentSource
+  }
+
+  get screenwidth() {
+    return this.lh.checkScreenWith()
   }
 
 }

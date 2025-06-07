@@ -1,7 +1,8 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ComunicationService } from '../../services/comunication.service';
 
 @Component({
   selector: 'app-header',
@@ -13,11 +14,16 @@ export class HeaderComponent implements OnInit {
   @Input() page:string = '';
   loginPage:boolean = false;
   mainMenu:boolean = false;
+  title:string = ''
+  screenWidth!:number;
 
   constructor(
     private router: Router,
     private as: AuthService,
-  ) {}
+    private com: ComunicationService,
+  ) {
+    this.checkScreenWith();
+  }
 
   ngOnInit(): void {
       this.router.events.subscribe(event => {
@@ -34,6 +40,7 @@ export class HeaderComponent implements OnInit {
           }
         }
       })
+      this.setTitle();
   }
 
   goToLogin() {
@@ -53,4 +60,15 @@ export class HeaderComponent implements OnInit {
     this.goToRootPath();
   }
 
+  setTitle()  {
+    if (this.com.currentElement) {
+      this.title = this.com.currentElement.title
+    } else if (this.title == '') {
+      this.title = sessionStorage.getItem('title_video') as string
+    }
+  }
+
+  checkScreenWith() {
+    this.screenWidth = screen.width
+  }
 }
