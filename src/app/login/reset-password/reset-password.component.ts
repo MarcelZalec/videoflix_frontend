@@ -27,7 +27,7 @@ export class ResetPasswordComponent {
   }
 
 
-  resetPass() {
+  async resetPass() {
     let token;
     this.route.params.subscribe((p:any) => {
       token = p.token;
@@ -36,7 +36,9 @@ export class ResetPasswordComponent {
       this.lh.showToastSignal("Passwords must match")
     }
     if (token && this.reset.value.password === this.reset.value.password2) {
-      this.as.resetPassword(token, this.reset.value.password);
+      await this.as.resetPassword(token, this.reset.value.password);
+      this.reset.reset()
+      this.router.navigateByUrl('login')
     }
   }
 }

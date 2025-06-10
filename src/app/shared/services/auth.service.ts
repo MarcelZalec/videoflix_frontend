@@ -45,14 +45,18 @@ export class AuthService {
     )
   }
 
-  async resetPassword(token:string, reset:any) {
+  async resetPassword(token:string, reset:any): Promise<any> {
     const url = `${Config.FULL_RESETPASS_URL}${token}`
     const body = {'password': reset}
     try {
       const response = await firstValueFrom(
-        this.http.post<any>(url, body)
+        this.http.post<any>(url, body, {
+          observe: 'response'
+        })
       )
-      console.log(response)
+      if(response.status === 200) {
+        this.lh.showToastSignal('Password changed successfully')
+      }
       return response
     } catch (e:any) {
       this.lh.showToastSignal(e['error'].error)

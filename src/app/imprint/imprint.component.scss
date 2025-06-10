@@ -10,11 +10,17 @@ body {
 }
 
 main {
-    @include mix.flex($j:start);
+    @include mix.flex($a:start, $g:20px);
+    color: c.$whiteText;
     width: 100%;
-    padding: 0px 20px;
+    padding: 0px 40px 60px 40px;
+    flex-direction: column;
 }
 
 .main_title {
     color: c.$purple;
+}
+
+a {
+    text-decoration: underline;
 }
