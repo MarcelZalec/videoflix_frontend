@@ -45,6 +45,21 @@ export class AuthService {
     )
   }
 
+  async resetPassword(token:string, reset:any) {
+    const url = `${Config.FULL_RESETPASS_URL}${token}`
+    const body = {'password': reset}
+    try {
+      const response = await firstValueFrom(
+        this.http.post<any>(url, body)
+      )
+      console.log(response)
+      return response
+    } catch (e:any) {
+      this.lh.showToastSignal(e['error'].error)
+      throw e;
+    }
+  }
+
   async forgetPass(email: string): Promise<any> {
     const body = { email };
     const link = `${Config.FULL_RESETPASS_URL}`;

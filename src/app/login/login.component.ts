@@ -15,7 +15,7 @@ import { AuthService } from '../shared/services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-  startpage:boolean = true;
+  startpage:boolean = false;
   errorMessage:boolean = false;
   startForm:FormGroup;
 
@@ -31,6 +31,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.router.url === '/'){
+          this.startpage = true; 
+        }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.router.url === '/'){
