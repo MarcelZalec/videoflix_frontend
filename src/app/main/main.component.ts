@@ -23,6 +23,9 @@ export class MainComponent implements OnInit, OnDestroy {
   categorys:string[] = [];
   videoSource:string | null = '';
   imgSource:string | null = '';
+  currentE:any = null;
+  all_categorys!:any[];
+  // startVideo:any = null; // wird nicht mehr benötigt, da es jetzt über den ComunicationService läuft
 
   constructor(
     private dbs: DatabaseService,
@@ -47,7 +50,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   }
 
-  getVideoDetails(){
+  getVideoDetails_OLD(){
     this.dbs.videos$.subscribe((v) => {
       v.forEach((obj) => {
         let data = {
@@ -55,7 +58,8 @@ export class MainComponent implements OnInit, OnDestroy {
           title:obj.title,
           thumbnail:obj.thumbnail,
           category:obj.category,
-          video:obj.video_file
+          video:obj.video_file,
+          description:obj.description,
         }
         this.videos.push(data)
         if (!this.categorys.includes(obj.category)) {
@@ -66,31 +70,80 @@ export class MainComponent implements OnInit, OnDestroy {
     })
   }
 
+  getVideoDetails(){
+    this.dbs.videos$.subscribe((v) => {
+      v.forEach((obj) => {
+        let data = {
+          id:obj.id,
+          title:obj.title,
+          thumbnail:obj.thumbnail,
+          category:obj.category,
+          video:obj.video_file,
+          description:obj.description,
+        }
+        // Group videos by category in all_categorys
+        if (!this.all_categorys) {
+          this.all_categorys = [];
+        }
+        let catGroup = this.all_categorys.find(group => group.category === obj.category);
+        if (catGroup) {
+          catGroup.videos.push(data);
+        } else {
+          this.all_categorys.push({ category: obj.category, videos: [data] });
+        }
+        console.log(this.all_categorys)
+        // this.videos.push(data)
+        // if (!this.categorys.includes(obj.category)) {
+        //   this.categorys.push(obj.category)
+        // }
+        this.latestVideos = this.videos
+      })
+    })
+  }
+
   setActiveVideo(id:number){
     this.com.setactiveVideo(id)
     this.router.navigateByUrl('video')
   }
 
-  setStartVideo(id?:number) {
+  clearStartVideo() {
+    this.videoSource = '';
+    this.imgSource = '';
+    this.currentE = null;
+    this.setStartVideo()
+  }
+
+  find(id: number): { categoryIndex: number, videoIndex: number } | null {
+    if (!this.all_categorys) return null;
+    for (let categoryIndex = 0; categoryIndex < this.all_categorys.length; categoryIndex++) {
+      const videoIndex = this.all_categorys[categoryIndex].videos.findIndex((v: any) => v.id === id);
+      if (videoIndex !== -1) {
+        return { categoryIndex, videoIndex };
+      }
+    }
+    return null;
+  }
+
+  setStartVideo(id?: number) {
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
       videoElement.muted = true;
       videoElement.autoplay = true;
     }
-    if (id) {
-      let index = this.videos.findIndex((vid) => vid.id === id)
-      this.imgSource = this.videos[index].thumbnail
-      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false) // funktioniert weiß nur nicht ob ich das so mache
-      this.videoSource = ''
-    } else {
-      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+    if (id && this.all_categorys) {
+      const found = this.find(id);
+      if (found) {
+        const videoObj = this.all_categorys[found.categoryIndex].videos[found.videoIndex];
+        this.imgSource = videoObj.thumbnail;
+        this.currentE = videoObj;
+        // this.videoSource = this.com.setVideoPath(videoObj.video, false); // funktioniert weiß nur nicht ob ich das so mache
+        return;
+      }
     }
-  }
-
-  clearStartVideo() {
+    // fallback/default
+    this.imgSource = 'http://127.0.0.1:8000/media/thumbnails/All-Round_Home-Server_selbst_bauen_Ideal_für_Anfänger_inkl_Ubuntu_Installation_4gTwXcY.png';
     this.videoSource = '';
-    this.imgSource = '';
-    this.setStartVideo()
+    this.currentE = null;
   }
 
   get currentSource() {
@@ -99,6 +152,10 @@ export class MainComponent implements OnInit, OnDestroy {
 
   get screenwidth() {
     return this.lh.checkScreenWith()
+  }
+
+  get currentElement() {
+    return this.com.currentElement;
   }
 
 }

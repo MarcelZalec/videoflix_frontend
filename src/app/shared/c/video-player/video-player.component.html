@@ -1,5 +1,25 @@
 <main>
     <app-header id="head" class="" [page]="'video'"></app-header>
+    <div id="qualitySymbol" class="quality_picker" (click)="toggleQualityPicker()">
+        <div id="qualityBackground" class="clickBackground d-none" (click)="toggleQualityPicker()"></div>
+        <table id="qualityPicker" class="quality-table d-none">
+            <tr>
+                <td (click)="checkInternetSpeedAndSetQuality()" class="quality-option" [ngClass]="{'activated': currentQuality === '00'}">auto</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('240')" class="quality-option" [ngClass]="{'activated': currentQuality === '240'}">240p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('360')" class="quality-option" [ngClass]="{'activated': currentQuality === '360'}">360p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('720')" class="quality-option" [ngClass]="{'activated': currentQuality === '720'}">720p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('1080')" class="quality-option" [ngClass]="{'activated': currentQuality === '1080'}">1080p</td>
+            </tr>
+        </table>
+    </div>
     <video 
         #target
         class="vjs-custom-theme video-js vjs-default-skin"
@@ -7,11 +27,3 @@
         preload="auto"
     ></video>
 </main>
-
-
-<!-- poster="element.thumbnail"   metadata     playsinline  src="{{currentSource}}"  custom-theme   controls-->
-
-<!-- (click)="setactiveVideo(1)" -->
-
-<!-- <button id="skipBackward">⏪ 10s zurück</button>
-<button id="skipForward">⏩ 10s vor</button> -->

@@ -51,32 +51,10 @@ main {
 .video_frame {
     @include mix.flex($a:start);
     flex-direction: column;
-    margin-top: 20px;
     >div {
         margin-top: 20px;
-        @include mix.flex($g:20px);
-        flex-direction: row;
-    }
-}
-
-.s_video {
-    width: 213px;
-    height: 120px;
-    // background-color: gray;
-    position: relative;
-    &:hover {
-        cursor: pointer;
-        transform: scale(1.02);
-    }
-
-    img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        z-index: -1;
+        @include mix.flex($a:start ,$g:20px);
+        flex-direction: column;
     }
 }
 
@@ -128,5 +106,55 @@ app-footer {
     }
     .s_video {
         margin-top: 20px;
+    }
+}
+
+.main_head_text {
+    @include mix.flex($a:start, $j:end);
+    flex-direction: column;
+    position: fixed;
+    top: 100px;
+    text-align: start;
+    gap: 32px;
+    color: c.$whiteText;
+    height: fit-content !important;
+    z-index: -1;
+    >p {
+        font-size: 16px;
+        font-weight: 400;
+        max-width: 440px;
+        line-height: 100%;
+    }
+    >span {
+        font-size: 88px;
+        font-weight: 700;
+        line-height: 100%;
+    }
+}
+
+.category {
+
+    .video_list {
+        @include mix.flex($a:start, $g:20px);
+        flex-wrap: wrap;
+        width: 100%;
+        >div {
+            width: 213px;
+            height: 120px;
+            position: relative;
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.02);
+            }
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                z-index: -1;
+            }
+        }
     }
 }

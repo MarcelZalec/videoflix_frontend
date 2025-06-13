@@ -1,17 +1,19 @@
 <body>
     <app-header [page]="'main'"></app-header>
     <main>
-        <!-- @if(currentSource != '') {
-        <div>
-            <app-video-player></app-video-player>
-        </div>
-        } -->
         <div class="main_head">
             @if(videoSource != '' && screenwidth > 500) {
                 <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
             }
             @if(imgSource != '') {
                 <img id="backgroundImg" [src]="imgSource" alt="">
+            }
+
+            @if(currentE != null && currentE.title != '') {
+                <div class="main_head_text">
+                    <span>{{currentE.title}}</span>
+                    <p>{{currentE.description}}</p>
+                </div>
             }
             <div class="new_on_videoflix" (mouseleave)="clearStartVideo()">
                 <h2>New on Videoflix</h2>
@@ -23,18 +25,19 @@
             </div>
         </div>
         <div class="category_cont">
-            <div class="video_frame" *ngFor="let category of categorys">
-                <h2>{{category.toUpperCase()}}</h2>
-                <div>
-                    @for(video of videos; track video) {
-                        @if(video.category === category) {
-                        <div class="s_video" (click)="setActiveVideo(video.id)" (mouseenter)="setStartVideo(video.id)">
-                            <h5>{{ video.title }}</h5>
-                            <img [src]="video.thumbnail" alt="">
+            <div class="video_frame">
+                @for(c of all_categorys; track c) {
+                    <div class="category" (mouseleave)="clearStartVideo()">
+                        <h2>{{c.category.toUpperCase()}}</h2>
+                        <div class="video_list">
+                            @for(v of c.videos; track v) {
+                                <div (mouseenter)="setStartVideo(v.id)">
+                                    <img (click)="setActiveVideo(v.id)" [src]="v.thumbnail" alt="">
+                                </div>
+                            }
                         </div>
-                        }
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
     </main>

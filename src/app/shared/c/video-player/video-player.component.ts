@@ -1,12 +1,13 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import videojs from 'video.js'
 import { ComunicationService } from '../../services/comunication.service';
 import Player from 'video.js/dist/types/player';
 import { HeaderComponent } from '../header/header.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-video-player',
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, CommonModule],
   templateUrl: './video-player.component.html',
   styleUrl: './video-player.component.scss'
 })
@@ -18,6 +19,8 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   player!: Player;// videojs.Player; 
   element:any;
   currentSource = '';
+  showQualityPicker = false;
+  currentQuality = '720'; // Default quality
 
   constructor(
     private com: ComunicationService,
@@ -39,7 +42,6 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
       this.player = videojs(this.videoElement.nativeElement, {
         ...this.videoOptions,
         controls: true,
-        // poster: this.element.thumbnail,
         html5: {
         vhs: {
           overrideNative: true,
@@ -65,16 +67,6 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
         },
       })
 
-      // // Skip-Funktionen
-      // const skipForward = () => this.player.currentTime(this.player.currentTime() + 10);
-      // const skipBackward = () => this.player.currentTime(this.player.currentTime() - 10);
-
-      // // Buttons hinzufügen
-      // document.getElementById('skipForward')?.addEventListener('click', skipForward);
-      // document.getElementById('skipBackward')?.addEventListener('click', skipBackward);
-
-      this.player.setIcon
-
       this.player.on('play', ()=> {})
       this.player.on('pause', ()=> {})
 
@@ -88,7 +80,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
 
       this.player.ready(() => {
         this.setAndGetCurrentTime(false);
-        this.player.volume(parseFloat(localStorage.getItem('videoVolume') || '0.5'))
+        this.player.volume(parseFloat(localStorage.getItem('videoVolume') || '1'))
         this.player.load();
       });
     }
@@ -105,15 +97,25 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   }
 
   getActiveVideo(){
-    this.element = this.com.currentElement
+    this.element = this.com.currentElement;
+    if (!this.element) {
+      this.element = sessionStorage.getItem('current_element_thumbnail') || '';
+    } else {
+      sessionStorage.setItem('current_element_thumbnail', this.element.thumbnail);
+    }
     this.currentSource = this.com.currentSource;
   }
 
   showHeader(): void {
-    const header = document.getElementById('head');
-    if (header) {
-      header.classList.remove('fadeOut'); // Entfernt die Ausblend-Animation
-      header.classList.add('fadeIn'); // Fügt die Einblend-Animation hinzu
+    const obj = [
+      document.getElementById('head'),
+      document.getElementById('qualitySymbol'),
+    ] as HTMLElement[];
+    if (obj && obj.length > 0) {
+      obj.forEach(el => {
+        el.classList.remove('fadeOut'); // Entfernt die Ausblend-Animation
+        el.classList.add('fadeIn'); // Fügt die Einblend-Animation hinzu
+      });
 
       // Falls bereits ein Timeout läuft, abbrechen
       if (this.timeoutId) {
@@ -122,8 +124,10 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
 
       // Nach 2 Sekunden wieder ausblenden
       this.timeoutId = window.setTimeout(() => {
-        header.classList.remove('fadeIn'); // Entfernt die Einblend-Animation
-        header.classList.add('fadeOut'); // Fügt die Ausblend-Animation hinzu
+        obj.forEach(el => {
+          el.classList.remove('fadeIn'); // Entfernt die Einblend-Animation
+          el.classList.add('fadeOut'); // Fügt die Ausblend-Animation hinzu
+        });
       }, 2000);
     }
   }
@@ -143,6 +147,105 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     } else {
       let t = sessionStorage.getItem('current_time_video') || 0
       this.player.currentTime(`${t}`)
+    }
+  }
+
+  toggleQualityPicker() {
+    const qualityPicker = document.getElementById('qualityPicker');
+    if (qualityPicker) {
+      qualityPicker.classList.toggle('d-none');
+      this.showQualityPicker = !this.showQualityPicker;
+
+      if (this.showQualityPicker) {
+        // Add click listener to close when clicking outside
+        setTimeout(() => {
+          document.addEventListener('mousedown', this.handleOutsideClick);
+          document.getElementById('qualityBackground')?.classList.toggle('d-none');
+        });
+      } else {
+        document.removeEventListener('mousedown', this.handleOutsideClick);
+      }
+    }
+  }
+
+  private handleOutsideClick = (event: MouseEvent) => {
+    const qualityPicker = document.getElementById('qualityPicker');
+    if (qualityPicker && !qualityPicker.contains(event.target as Node)) {
+      qualityPicker.classList.add('d-none');
+      this.showQualityPicker = false;
+      document.removeEventListener('mousedown', this.handleOutsideClick);
+    }
+  }
+
+  changeQality(quality: string) {
+    document.getElementById('qualityBackground')?.classList.toggle('d-none');
+    let playTime = this.player.currentTime()
+    const source = this.currentSource;
+    if (source) {
+      this.currentQuality = quality;
+      const newSrc = this.currentSource.replace(/_\d{3,4}p/, `_${quality}p`); // Replace any _[3 or 4 digits]p with the new quality
+      sessionStorage.setItem('current_video', newSrc);
+      this.player.src(newSrc);
+      this.player.load();
+      this.player.currentTime(playTime);
+      this.player.play();
+    }
+  }
+
+  private qualityCheckIntervalId: any = null;
+
+  checkInternetSpeedAndSetQuality() {
+    // Define quality thresholds in Mbps
+    const qualityMap = [
+      { quality: '1080', minSpeed: 8 },
+      { quality: '720', minSpeed: 4 },
+      { quality: '480', minSpeed: 2 },
+      { quality: '360', minSpeed: 1 },
+      { quality: '240', minSpeed: 0 }
+    ];
+
+    const testImage = `${this.element.thumbnail}`; // Small image for speed test
+    const imageSizeBytes = 703; // Approximate size of the image in bytes
+
+    const measureSpeed = (): Promise<number> => {
+      return new Promise(resolve => {
+        const startTime = Date.now();
+        const img = new Image();
+        img.onload = () => {
+          const duration = (Date.now() - startTime) / 1000;
+          const bitsLoaded = imageSizeBytes * 8;
+          const speedMbps = (bitsLoaded / duration) / (1024 * 1024);
+          resolve(speedMbps);
+        };
+        img.onerror = () => resolve(0);
+        img.src = `${testImage}?cacheBust=${Math.random()}`;
+      });
+    };
+
+    const setQualityBySpeed = (speed: number) => {
+      for (const q of qualityMap) {
+        if (speed >= q.minSpeed) {
+          if (this.currentQuality !== q.quality) {
+            this.changeQality(q.quality);
+          }
+          break;
+        }
+      }
+    };
+
+    const checkAndSet = async () => {
+      console.log('Checking internet speed...');
+      const speed = await measureSpeed();
+      setQualityBySpeed(speed);
+    };
+
+    // Only start interval if not already running
+    if (!this.qualityCheckIntervalId) {
+      // Initial check
+      checkAndSet();
+
+      // Re-check every 15 seconds
+      this.qualityCheckIntervalId = setInterval(checkAndSet, 15000);
     }
   }
 
