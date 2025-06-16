@@ -161,3 +161,28 @@ app-header {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
 }
+
+.mobile_controles {
+  position: fixed;
+  width: 40%;
+  height: 60px;
+  @include mix.flex($j: space-around);
+  z-index: 9999;
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: #00ff00;
+    font-size: 24px;
+    cursor: pointer;
+    transform: scale(1.5);
+  }
+}
+
+.custom_play_button::before {
+  content: "\f101";
+}
+
+.custom_pause_button::before {
+  content: "\f103";
+}

@@ -26,4 +26,12 @@
         controls
         preload="auto"
     ></video>
+
+    @if(screenwidth < 700 && videoStarted) {
+        <div id="mobileControles" class="mobile_controles" (touchstart)="sP($event)">
+            <button (click)="videoForOrBackward('backward')" class="vjs-icon-replay-10"></button>
+            <button (click)="togglePlayPause_mobile()" id="playerSate_mobile" class="custom_pause_button vjs-icon-play" type="button" title="Play"><span class="vjs-icon-placeholder" aria-hidden="true"></span></button>
+            <button (click)="videoForOrBackward('forward')" class="vjs-icon-forward-10"></button>
+        </div>
+    }
 </main>

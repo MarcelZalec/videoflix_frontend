@@ -5,33 +5,38 @@
             @if(videoSource != '' && screenwidth > 500) {
                 <video id="backgroundVideo" #backgroundVideo [src]="videoSource" muted autoplay loop></video>
             }
-            @if(imgSource != '') {
+            @if(imgSource != '' && screenwidth > 500) {
                 <img id="backgroundImg" [src]="imgSource" alt="">
             }
 
-            @if(currentE != null && currentE.title != '') {
+            @if(currentE != null && currentE.title != '' && screenwidth > 500) {
                 <div class="main_head_text">
                     <span>{{currentE.title}}</span>
                     <p>{{currentE.description}}</p>
+                    <button (click)="setActiveVideo(currentE.id)">PLAY</button>
                 </div>
             }
-            <div class="new_on_videoflix" (mouseleave)="clearStartVideo()">
-                <h2>New on Videoflix</h2>
-                    @for(v of latestVideos; track v) {
-                        <div class="s_video" (mouseenter)="setStartVideo(v.id)">
-                            <img (click)="setActiveVideo(v.id)" [src]="v.thumbnail" alt="">
-                        </div>
-                    }
-            </div>
+            @if(latestVideos.length > 0) {
+                <div class="new_on_videoflix">
+                    <h2>New on Videoflix</h2>
+                    <div class="video_list">
+                        @for(v of latestVideos; track v) {
+                            <div class="s_video" (mouseenter)="setStartVideo(v.id)">
+                                <img (click)="setActiveVideo(v.id)" [src]="v.thumbnail" alt="">
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         </div>
         <div class="category_cont">
             <div class="video_frame">
                 @for(c of all_categorys; track c) {
-                    <div class="category" (mouseleave)="clearStartVideo()">
+                    <div class="category">
                         <h2>{{c.category.toUpperCase()}}</h2>
                         <div class="video_list">
-                            @for(v of c.videos; track v) {
-                                <div (mouseenter)="setStartVideo(v.id)">
+                            @for(v of c.videos; track v; let i = $index) {
+                                <div id="video_{{c.category}}_{{i}}" class="s_video" (mouseenter)="setStartVideo(v.id)">
                                     <img (click)="setActiveVideo(v.id)" [src]="v.thumbnail" alt="">
                                 </div>
                             }

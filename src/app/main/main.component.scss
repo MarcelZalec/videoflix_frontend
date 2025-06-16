@@ -98,14 +98,30 @@ app-footer {
     min-height: 66vh;
 }
 
+.s_video {
+    width: 213px;
+    height: 120px;
+    position: relative;
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+    }
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+}
+
 .main_head {
     height: 78vh;
     >div {
         height: 100%;
         padding: 0px 40px;
-    }
-    .s_video {
-        margin-top: 20px;
     }
 }
 
@@ -118,7 +134,7 @@ app-footer {
     gap: 32px;
     color: c.$whiteText;
     height: fit-content !important;
-    z-index: -1;
+    z-index: 1;
     >p {
         font-size: 16px;
         font-weight: 400;
@@ -130,31 +146,16 @@ app-footer {
         font-weight: 700;
         line-height: 100%;
     }
-}
-
-.category {
-
-    .video_list {
-        @include mix.flex($a:start, $g:20px);
-        flex-wrap: wrap;
-        width: 100%;
-        >div {
-            width: 213px;
-            height: 120px;
-            position: relative;
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.02);
-            }
-            img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 100%;
-                object-fit: cover;
-                z-index: -1;
-            }
+    button {
+        @include mix.button();
+        &:hover {
+            cursor: pointer;
         }
     }
 }
+
+.video_list {
+    @include mix.flex($j:start, $a:start, $g:20px);
+    width: 100%;
+}
+
