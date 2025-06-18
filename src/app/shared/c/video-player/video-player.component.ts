@@ -30,6 +30,12 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     private com: ComunicationService,
   ){
     this.getActiveVideo();
+  }
+
+
+  ngAfterViewInit(): void {
+    this.checkStorage();
+
     if (window.innerWidth < 700) {
       this.touchMoveListener = (event: TouchEvent) => {
         this.showHeader(true)
@@ -41,11 +47,6 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
       }
       document.addEventListener('mousemove', this.mouseMoveListener)
     }
-  }
-
-
-  ngAfterViewInit(): void {
-    this.checkStorage();
 
     this.initializePlayer();
   }

@@ -40,4 +40,14 @@
             <img src="./svgs/Symbol.svg" alt="">
         </div>
     }
+
+    @if (page === 'video_mobile') {
+        <div class="frame video">
+            <div class="mobileLogo_Title">
+                <img src="./svgs/Symbol.svg" alt="">
+                <h2 class="title">{{ title }}</h2>
+            </div>
+            <img (click)="goToRootPath()" src="./svgs/close_small.svg" alt="">
+        </div>
+    }
 </header>

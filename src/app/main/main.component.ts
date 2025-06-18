@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
 import { ComunicationService } from '../shared/services/comunication.service';
@@ -26,6 +26,11 @@ export class MainComponent implements OnInit, OnDestroy {
   currentE:any = null;
   all_categorys!:any[];
   private scrollEventListener!: (event: any) => void;
+  headerAnimationClass = '';
+  private lastScrollTop = 0;
+  private scrollTimeout: any;
+  mobile = false;
+  videoDetail = false;
 
   constructor(
     private dbs: DatabaseService,
@@ -43,6 +48,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.dbs.loadVideos();
     this.setStartVideo();
     window.addEventListener('scroll', this.scrollEventListener);
+    this.setMobile()
   }
 
   ngOnDestroy(): void {
@@ -164,6 +170,39 @@ export class MainComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+    }
+
+    this.scrollTimeout = setTimeout(() => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      this.headerAnimationClass = scrollTop > this.lastScrollTop
+        ? 'scroll_animation_header_down'
+        : 'scroll_animation_header_up';
+
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, 100); // <— debounce-Zeit in Millisekunden (hier 100ms)
+  }
+
+  VideoDetailOpen(id: number) {
+    this.videoDetail = true;
+    this.com.setactiveVideo(id);
+    const found = this.find(id);
+    if (found) {
+      const videoObj = this.all_categorys[found.categoryIndex].videos[found.videoIndex];
+      this.imgSource = videoObj.thumbnail;
+      this.currentE = videoObj;
+      this.videoSource = '';
+    }
+  }
+
+  setMobile() {
+    this.mobile = window.innerWidth < 700;
   }
 
   get currentSource() {

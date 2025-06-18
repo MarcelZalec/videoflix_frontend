@@ -1,7 +1,11 @@
 <main>
-    <app-header id="head" class="" [page]="'video'"></app-header>
-    <div id="qualitySymbol" class="quality_picker" (click)="toggleQualityPicker()">
-        <div id="qualityBackground" class="clickBackground d-none" (click)="toggleQualityPicker()"></div>
+    @if(screenwidth < 700) {
+        <app-header id="head" class="" [page]="'video_mobile'"></app-header>
+    }@else {
+        <app-header id="head" class="" [page]="'video'"></app-header>
+    }
+    <div id="qualitySymbol" class="quality_picker" (click)="toggleQualityPicker()" (touchstart)="sP($event)">
+        <div id="qualityBackground" class="clickBackground d-none" (click)="toggleQualityPicker()" (touchstart)="sP($event)"></div>
         <table id="qualityPicker" class="quality-table d-none">
             <tr>
                 <td (click)="checkInternetSpeedAndSetQuality()" class="quality-option" [ngClass]="{'activated': currentQuality === '00'}">auto</td>
@@ -28,7 +32,7 @@
     ></video>
 
     @if(screenwidth < 700 && videoStarted) {
-        <div id="mobileControles" class="mobile_controles" (touchstart)="sP($event)">
+        <div id="mobileControles" class="mobile_controles" (touchend)="sP($event)">
             <button (click)="videoForOrBackward('backward')" class="vjs-icon-replay-10"></button>
             <button (click)="togglePlayPause_mobile()" id="playerSate_mobile" class="custom_pause_button vjs-icon-play" type="button" title="Play"><span class="vjs-icon-placeholder" aria-hidden="true"></span></button>
             <button (click)="videoForOrBackward('forward')" class="vjs-icon-forward-10"></button>

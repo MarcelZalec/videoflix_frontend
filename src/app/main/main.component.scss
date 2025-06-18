@@ -1,5 +1,6 @@
 @use "./../../styles/colors.scss" as c;
 @use "./../../styles/mixins.scss" as mix;
+@use "./../../styles/animations.scss";
 
 *{
     max-width: 1920px;
@@ -38,7 +39,7 @@ header {
 
 main {
     min-height: calc(100vh - 169px);
-    width: 100%;
+    width: 100vw;
     // padding: 0px 40px;
 }
 
@@ -159,3 +160,11 @@ app-footer {
     width: 100%;
 }
 
+.scroll_animation_header_down {
+    animation: fadeOut 0.5s ease-in-out;
+    transform: translate(0, -110px);
+}
+
+.scroll_animation_header_up {
+    animation: fadeIn 0.5s ease-in-out;
+}

@@ -4,6 +4,7 @@ export function setUpControles() {
             playToggle: false,
             fullscreenToggle: false,
             volumePanel: false,
+            pictureInPictureToggle: false,
           }
         : {
             fullscreenToggle: false,
