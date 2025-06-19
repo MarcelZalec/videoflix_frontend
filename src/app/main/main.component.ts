@@ -58,7 +58,7 @@ export class MainComponent implements OnInit, OnDestroy {
   onScroll(event: Event): void {
     const scrollY = window.scrollY || window.pageYOffset;
     if (scrollY > 200 && window.innerWidth > 500) {
-      this.clearStartVideo();
+      // this.clearStartVideo();
     } else {
       return
     }
