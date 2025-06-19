@@ -45,6 +45,15 @@ input::placeholder {
     position: absolute;
 }
 
+button:disabled {
+    background-color: c.$disabbled !important;
+}
+
+a {
+    text-decoration: none;
+    color: c.$whiteText;
+}
+
 app-sign-in,
 app-sign-up,
 app-forget-password,

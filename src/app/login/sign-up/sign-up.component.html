@@ -17,5 +17,5 @@
             <img (click)="lh.changeVisibility(1)" class="passowordVisibility" [src]="lh.passwordFields[1].src" alt="">
         </div>
     </form>
-    <button (click)="register()">Get Started</button>
+    <button [disabled]="signUpForm.invalid" (click)="register()">Get Started</button>
 </div>

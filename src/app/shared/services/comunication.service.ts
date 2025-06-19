@@ -11,7 +11,6 @@ export class ComunicationService {
   currentElement:any;
   currentSource = '';
   resulution = '720p';
-  // startVideo:any = null;
 
   constructor(
     private dbs: DatabaseService, 
@@ -50,8 +49,6 @@ export class ComunicationService {
           this.currentSource = file
           sessionStorage.setItem('current_video', this.currentSource)
           sessionStorage.setItem('title_video', this.currentElement.title)
-        } else {
-          console.warn("Kein Video mit der ID gefunden", element)
         }
       });
     })
@@ -60,8 +57,6 @@ export class ComunicationService {
   getStartVideo() {
     this.getVideos()
     if (this.videos.length != 0) {
-      // this.startVideo = `${this.videos[0].video_file}`
-      console.log("Das ist das Video", this.videos[0].video_file)
       return `${this.videos[0].video_file}`
     }
     return null

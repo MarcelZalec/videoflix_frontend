@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router, Scroll } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
 import { ComunicationService } from '../shared/services/comunication.service';
 import { FooterComponent } from '../shared/c/footer/footer.component';
@@ -23,6 +23,14 @@ export class MainComponent implements OnInit, OnDestroy {
   categorys:string[] = [];
   videoSource:string | null = '';
   imgSource:string | null = '';
+  currentE:any = null;
+  all_categorys!:any[];
+  private scrollEventListener!: (event: any) => void;
+  headerAnimationClass = '';
+  private lastScrollTop = 0;
+  private scrollTimeout: any;
+  mobile = false;
+  videoDetail = false;
 
   constructor(
     private dbs: DatabaseService,
@@ -31,20 +39,29 @@ export class MainComponent implements OnInit, OnDestroy {
     private lh: LittleHelpersService,
   ){
     this.getVideoDetails();
+    this.scrollEventListener = this.onScroll.bind(this);
   }
 
-
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.videos = [];
     this.categorys = [];
     this.dbs.loadVideos();
     this.setStartVideo();
+    window.addEventListener('scroll', this.scrollEventListener);
+    this.setMobile()
   }
 
   ngOnDestroy(): void {
+    window.removeEventListener('scroll', this.scrollEventListener);
+  }
 
+  onScroll(event: Event): void {
+    const scrollY = window.scrollY || window.pageYOffset;
+    if (scrollY > 200 && window.innerWidth > 500) {
+      // this.clearStartVideo();
+    } else {
+      return
+    }
   }
 
   getVideoDetails(){
@@ -55,13 +72,26 @@ export class MainComponent implements OnInit, OnDestroy {
           title:obj.title,
           thumbnail:obj.thumbnail,
           category:obj.category,
-          video:obj.video_file
+          video:obj.video_file,
+          description:obj.description,
+          created_at:obj.created_at,
         }
-        this.videos.push(data)
-        if (!this.categorys.includes(obj.category)) {
-          this.categorys.push(obj.category)
+        if (!this.all_categorys) {
+          this.all_categorys = [];
         }
-        this.latestVideos = this.videos
+        let catGroup = this.all_categorys.find(group => group.category === obj.category);
+        if (catGroup) {
+          if (catGroup.videos.length > 0) {
+            if (catGroup.videos.find((video: any) => video.id === obj.id)) {
+              return
+            } else {
+              catGroup.videos.push(data);
+            }
+          }
+        } else {
+          this.all_categorys.push({ category: obj.category, videos: [data] });
+        }
+        this.setLatestVideos()
       })
     })
   }
@@ -71,26 +101,108 @@ export class MainComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('video')
   }
 
-  setStartVideo(id?:number) {
+  clearStartVideo() {
+    this.videoSource = '';
+    this.imgSource = '';
+    this.currentE = null;
+    this.setStartVideo()
+  }
+
+  find(id: number): { categoryIndex: number, videoIndex: number } | null {
+    if (!this.all_categorys) return null;
+    for (let categoryIndex = 0; categoryIndex < this.all_categorys.length; categoryIndex++) {
+      const videoIndex = this.all_categorys[categoryIndex].videos.findIndex((v: any) => v.id === id);
+      if (videoIndex !== -1) {
+        return { categoryIndex, videoIndex };
+      }
+    }
+    return null;
+  }
+
+  setStartVideo(id?: number) {
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
       videoElement.muted = true;
       videoElement.autoplay = true;
     }
-    if (id) {
-      let index = this.videos.findIndex((vid) => vid.id === id)
-      this.imgSource = this.videos[index].thumbnail
-      // this.videoSource = this.com.setVideoPath(this.videos[index].video, false) // funktioniert weiß nur nicht ob ich das so mache
-      this.videoSource = ''
+    if (id && this.all_categorys) {
+      const found = this.find(id);
+      if (found) {
+        const videoObj = this.all_categorys[found.categoryIndex].videos[found.videoIndex];
+        this.imgSource = videoObj.thumbnail;
+        this.currentE = videoObj;
+        // this.videoSource = this.com.setVideoPath(videoObj.video, false); // funktioniert weiß nur nicht ob ich das so mache
+        return;
+      }
+    }
+    // fallback/default
+    this.imgSource = 'http://127.0.0.1:8000/media/thumbnails/All-Round_Home-Server_selbst_bauen_Ideal_für_Anfänger_inkl_Ubuntu_Installation_4gTwXcY.png';
+    this.videoSource = '';
+    this.currentE = null;
+  }
+
+
+  // Diese Methode setzt die neuesten Videos, die in den letzten 48 Stunden hochgeladen wurden
+  // und begrenzt die Anzahl auf 6 Videos.
+  setLatestVideos() {
+    this.all_categorys.forEach(e => {
+      for (let i = 0; i < e.videos.length; i++) {
+        e.videos[i].created_at = e.videos[i].created_at || new Date().toISOString(); // Sicherstellen, dass created_at gesetzt ist
+        if (this.checkLast48Hours(e.videos[i].created_at)) {
+          e.videos.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+          this.latestVideos.push(e.videos[i]);
+        }
+        this.latestVideos = this.latestVideos.filter((video, index, self) =>
+          index === self.findIndex((v) => v.id === video.id)
+        ); // Duplikate entfernen
+      }
+      this.latestVideos.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      this.latestVideos = this.latestVideos.slice(0, 6); // Begrenze auf die neuesten 6 Videos
+    })
+  }
+
+  checkLast48Hours(time: string | number | Date): boolean {
+    const now = Date.now();
+    const videoTime = new Date(time).getTime();
+    const diff = now - videoTime;
+    if (diff <= 48 * 60 * 60 * 1000 && diff >= 0) {
+      return true;
     } else {
-      this.videoSource = 'http://127.0.0.1:8000/media/videos/All-Round_Home-Server_selbst_bauen_Ideal_f%C3%BCr_Anf%C3%A4nger_inkl_Ubuntu_Installation.mp4'
+      return false;
     }
   }
 
-  clearStartVideo() {
-    this.videoSource = '';
-    this.imgSource = '';
-    this.setStartVideo()
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+    }
+
+    this.scrollTimeout = setTimeout(() => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      this.headerAnimationClass = scrollTop > this.lastScrollTop
+        ? 'scroll_animation_header_down'
+        : 'scroll_animation_header_up';
+
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, 100); // <— debounce-Zeit in Millisekunden (hier 100ms)
+  }
+
+  VideoDetailOpen(id: number) {
+    this.videoDetail = true;
+    this.com.setactiveVideo(id);
+    const found = this.find(id);
+    if (found) {
+      const videoObj = this.all_categorys[found.categoryIndex].videos[found.videoIndex];
+      this.imgSource = videoObj.thumbnail;
+      this.currentE = videoObj;
+      this.videoSource = '';
+    }
+  }
+
+  setMobile() {
+    this.mobile = window.innerWidth < 700;
   }
 
   get currentSource() {
@@ -99,6 +211,10 @@ export class MainComponent implements OnInit, OnDestroy {
 
   get screenwidth() {
     return this.lh.checkScreenWith()
+  }
+
+  get currentElement() {
+    return this.com.currentElement;
   }
 
 }

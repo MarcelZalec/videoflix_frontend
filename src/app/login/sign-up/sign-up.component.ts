@@ -22,8 +22,8 @@ export class SignUpComponent {
   ) {
     this.signUpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(2)]],
-      password2: ['', [Validators.required, Validators.minLength(2)]]
+      password: ['', [Validators.required, Validators.minLength(4)]],
+      password2: ['', [Validators.required, Validators.minLength(4)]]
     })
     this.tryToSetEmail()
   }
@@ -49,6 +49,7 @@ export class SignUpComponent {
         this.lh.showToastSignal('You must fill all fields')
       } else if (this.signUpForm.valid && this.signUpForm.value.password == this.signUpForm.value.password2) {
         await lastValueFrom(this.as.register(user))
+        this.signUpForm.reset()
       } else if(this.signUpForm.value.password != this.signUpForm.value.password2){
         this.lh.showToastSignal("Passwords do not match!")
       } else return

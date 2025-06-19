@@ -16,11 +16,12 @@ export const routes: Routes = [
             { path: 'login', component: SignInComponent },
             { path: 'forget', component: ForgetPasswordComponent },
             { path: 'signUp', component: SignUpComponent },
-            { path: 'resetPassword', component: ResetPasswordComponent },
+            { path: 'resetPassword/:token', component: ResetPasswordComponent },
         ]
     },
     { path: 'imprint', component: ImprintComponent},
     { path: 'privacy', component: PrivacyComponent},
     { path: 'main', component: MainComponent, canActivate: [authGuard]},
     { path: 'video', component: VideoPlayerComponent, canActivate: [authGuard]},
+    { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];

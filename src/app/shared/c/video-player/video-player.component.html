@@ -1,17 +1,41 @@
 <main>
-    <app-header id="head" class="" [page]="'video'"></app-header>
+    @if(screenwidth < 700) {
+        <app-header id="head" class="" [page]="'video_mobile'"></app-header>
+    }@else {
+        <app-header id="head" class="" [page]="'video'"></app-header>
+    }
+    <div id="qualitySymbol" class="quality_picker" (click)="toggleQualityPicker()" (touchstart)="sP($event)">
+        <div id="qualityBackground" class="clickBackground d-none" (click)="toggleQualityPicker()" (touchstart)="sP($event)"></div>
+        <table id="qualityPicker" class="quality-table d-none">
+            <tr>
+                <td (click)="checkInternetSpeedAndSetQuality()" class="quality-option" [ngClass]="{'activated': currentQuality === '00'}">auto</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('240')" class="quality-option" [ngClass]="{'activated': currentQuality === '240'}">240p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('360')" class="quality-option" [ngClass]="{'activated': currentQuality === '360'}">360p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('720')" class="quality-option" [ngClass]="{'activated': currentQuality === '720'}">720p</td>
+            </tr>
+            <tr>
+                <td (click)="changeQality('1080')" class="quality-option" [ngClass]="{'activated': currentQuality === '1080'}">1080p</td>
+            </tr>
+        </table>
+    </div>
     <video 
         #target
         class="vjs-custom-theme video-js vjs-default-skin"
         controls
         preload="auto"
     ></video>
+
+    @if(screenwidth < 700 && videoStarted) {
+        <div id="mobileControles" class="mobile_controles" (touchend)="sP($event)">
+            <button (click)="videoForOrBackward('backward')" class="vjs-icon-replay-10"></button>
+            <button (click)="togglePlayPause_mobile()" id="playerSate_mobile" class="custom_pause_button vjs-icon-play" type="button" title="Play"><span class="vjs-icon-placeholder" aria-hidden="true"></span></button>
+            <button (click)="videoForOrBackward('forward')" class="vjs-icon-forward-10"></button>
+        </div>
+    }
 </main>
-
-
-<!-- poster="element.thumbnail"   metadata     playsinline  src="{{currentSource}}"  custom-theme   controls-->
-
-<!-- (click)="setactiveVideo(1)" -->
-
-<!-- <button id="skipBackward">⏪ 10s zurück</button>
-<button id="skipForward">⏩ 10s vor</button> -->
