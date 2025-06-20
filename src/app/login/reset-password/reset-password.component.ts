@@ -13,6 +13,15 @@ import { AuthService } from '../../shared/services/auth.service';
 export class ResetPasswordComponent {
   reset:FormGroup;
 
+  /**
+   * Initializes the component and defines the reactive form for password input.
+   *
+   * @param {Router} router - Angular router for navigation.
+   * @param {FormBuilder} fb - Form builder service to create the password reset form.
+   * @param {LittleHelpersService} lh - UI helper service for showing toast notifications.
+   * @param {AuthService} as - Service handling authentication-related API calls.
+   * @param {ActivatedRoute} route - Provides access to route parameters like the reset token.
+   */
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -27,6 +36,12 @@ export class ResetPasswordComponent {
   }
 
 
+  /**
+   * Handles password reset logic using the token from the URL.
+   * Validates password fields, displays toast messages, and triggers navigation upon success.
+   *
+   * @returns {Promise<void>}
+   */
   async resetPass() {
     let token;
     this.route.params.subscribe((p:any) => {

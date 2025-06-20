@@ -17,6 +17,13 @@ import { LittleHelpersService } from '../shared/services/little-helpers.service'
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
+/**
+ * Component responsible for displaying categorized videos, latest uploads, and managing
+ * user interaction with the video interface.
+ * 
+ * Handles logic for video organization, scroll-based UI animation, responsive design,
+ * and dynamic video detail loading.
+ */
 export class MainComponent implements OnInit, OnDestroy {
   videos:any[] = [];
   latestVideos:any[] = [];
@@ -32,6 +39,10 @@ export class MainComponent implements OnInit, OnDestroy {
   mobile = false;
   videoDetail = false;
 
+  /**
+   * Initializes services and binds scroll behavior.
+   * Also triggers initial video data load.
+   */
   constructor(
     private dbs: DatabaseService,
     private router:Router,
@@ -42,6 +53,9 @@ export class MainComponent implements OnInit, OnDestroy {
     this.scrollEventListener = this.onScroll.bind(this);
   }
 
+  /**
+   * Lifecycle hook: Sets up video categories, start video, scroll listener, and mobile detection.
+   */
   ngOnInit(): void {
     this.videos = [];
     this.categorys = [];
@@ -51,10 +65,16 @@ export class MainComponent implements OnInit, OnDestroy {
     this.setMobile()
   }
 
+  /**
+   * Lifecycle hook: Cleans up scroll listener on destroy.
+   */
   ngOnDestroy(): void {
     window.removeEventListener('scroll', this.scrollEventListener);
   }
 
+  /**
+   * Scroll event logic placeholder for potential future enhancements.
+   */
   onScroll(event: Event): void {
     const scrollY = window.scrollY || window.pageYOffset;
     if (scrollY > 200 && window.innerWidth > 500) {
@@ -64,6 +84,9 @@ export class MainComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Subscribes to video stream and organizes them by category.
+   */
   getVideoDetails(){
     this.dbs.videos$.subscribe((v) => {
       v.forEach((obj) => {
@@ -96,11 +119,17 @@ export class MainComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Activates a selected video and navigates to its detail page.
+   */
   setActiveVideo(id:number){
     this.com.setactiveVideo(id)
     this.router.navigateByUrl('video')
   }
 
+  /**
+   * Resets the preview video data to default.
+   */
   clearStartVideo() {
     this.videoSource = '';
     this.imgSource = '';
@@ -108,6 +137,12 @@ export class MainComponent implements OnInit, OnDestroy {
     this.setStartVideo()
   }
 
+  /**
+   * Finds the index of a video within all categorized videos.
+   *
+   * @param {number} id - The video ID to search for.
+   * @returns {object | null} - Category and video indices or null if not found.
+   */
   find(id: number): { categoryIndex: number, videoIndex: number } | null {
     if (!this.all_categorys) return null;
     for (let categoryIndex = 0; categoryIndex < this.all_categorys.length; categoryIndex++) {
@@ -119,6 +154,11 @@ export class MainComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * Sets the preview video using the provided video ID or a default fallback.
+   *
+   * @param {number} [id] - Optional ID of the video to show in preview.
+   */
   setStartVideo(id?: number) {
     const videoElement = document.getElementById("backgroundVideo") as HTMLVideoElement;
     if (videoElement) {
@@ -135,15 +175,15 @@ export class MainComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    // fallback/default
     this.imgSource = 'http://127.0.0.1:8000/media/thumbnails/All-Round_Home-Server_selbst_bauen_Ideal_für_Anfänger_inkl_Ubuntu_Installation_4gTwXcY.png';
     this.videoSource = '';
     this.currentE = null;
   }
 
 
-  // Diese Methode setzt die neuesten Videos, die in den letzten 48 Stunden hochgeladen wurden
-  // und begrenzt die Anzahl auf 6 Videos.
+  /**
+   * Updates the list of the latest 6 videos uploaded within the last 48 hours.
+   */
   setLatestVideos() {
     this.all_categorys.forEach(e => {
       for (let i = 0; i < e.videos.length; i++) {
@@ -161,6 +201,12 @@ export class MainComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Checks whether a video was uploaded within the last 48 hours.
+   *
+   * @param {string | number | Date} time - Timestamp to compare.
+   * @returns {boolean} - True if within 48 hours, false otherwise.
+   */
   checkLast48Hours(time: string | number | Date): boolean {
     const now = Date.now();
     const videoTime = new Date(time).getTime();
@@ -172,6 +218,9 @@ export class MainComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Tracks scroll direction to animate header elements accordingly.
+   */
   @HostListener('window:scroll', [])
   onWindowScroll() {
     if (this.scrollTimeout) {
@@ -189,6 +238,11 @@ export class MainComponent implements OnInit, OnDestroy {
     }, 100); // <— debounce-Zeit in Millisekunden (hier 100ms)
   }
 
+  /**
+   * Displays detailed view of a selected video.
+   *
+   * @param {number} id - ID of the video to show in detail.
+   */
   VideoDetailOpen(id: number) {
     this.videoDetail = true;
     this.com.setactiveVideo(id);
@@ -201,18 +255,24 @@ export class MainComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Determines whether to apply mobile layout styles.
+   */
   setMobile() {
     this.mobile = window.innerWidth < 700;
   }
 
+  /** Gets the current video source from the communication service. */
   get currentSource() {
     return this.com.currentSource
   }
 
+  /** Gets the current screen width using the helper service. */
   get screenwidth() {
     return this.lh.checkScreenWith()
   }
 
+  /** Gets the currently selected video object from the communication service. */
   get currentElement() {
     return this.com.currentElement;
   }

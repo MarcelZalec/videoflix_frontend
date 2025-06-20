@@ -34,7 +34,7 @@
     @if(page === 'video') {
         <div class="frame video">
             <div>
-                <img (click)="goToRootPath()" src="./svgs/arrow_back.svg" alt="">
+                <img (click)="goToMainMenu()" src="./svgs/arrow_back.svg" alt="">
             </div>
             <h2 class="title">{{ title }}</h2>
             <img src="./svgs/Symbol.svg" alt="">
@@ -47,7 +47,7 @@
                 <img src="./svgs/Symbol.svg" alt="">
                 <h2 class="title">{{ title }}</h2>
             </div>
-            <img (click)="goToRootPath()" src="./svgs/close_small.svg" alt="">
+            <img (click)="goToMainMenu()" src="./svgs/close_small.svg" alt="">
         </div>
     }
 </header>

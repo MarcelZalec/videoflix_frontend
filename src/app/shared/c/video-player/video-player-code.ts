@@ -1,3 +1,11 @@
+/**
+ * Returns control bar configuration options based on the screen width.
+ * 
+ * On small screens (<700px), certain controls are disabled for a cleaner UI.
+ * On larger screens, inline volume control and skip buttons are enabled.
+ *
+ * @returns {object} - Control bar configuration object suitable for initializing a video player.
+ */
 export function setUpControles() {
     const controlBarOptions = window.innerWidth < 700
         ? {
