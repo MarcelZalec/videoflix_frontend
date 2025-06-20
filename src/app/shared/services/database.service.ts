@@ -14,6 +14,12 @@ export class DatabaseService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Loads videos from the backend endpoint and updates the video subject.
+   * Enhances each video's thumbnail path by prefixing with media URL.
+   * Handles errors gracefully and logs them to the console.
+   * @returns A subscription to the video data stream (not recommended for component use).
+   */
   async loadVideos() {
     return this.http
       .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`)

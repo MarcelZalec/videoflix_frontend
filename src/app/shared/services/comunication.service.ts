@@ -16,6 +16,9 @@ export class ComunicationService {
     private dbs: DatabaseService, 
   ) {}
 
+  /**
+   * Fetches videos from the database service and sets formatted video paths.
+   */
   getVideos() {
     this.dbs.videos$.subscribe((v) => {
       if (v && Array.isArray(v)) {
@@ -31,6 +34,12 @@ export class ComunicationService {
     })
   }
 
+  /**
+   * Updates the video path to include resolution-specific HLS format.
+   * @param path Original video file path.
+   * @param replace If false, returns raw media path. If true, returns HLS path.
+   * @returns The updated or original video URL.
+   */
   setVideoPath(path:string, replace:boolean = true): string{
     const updated_path = path.replace('.mp4', `_${this.resulution}_hls/index.m3u8`)
     if (!replace) {
@@ -40,6 +49,10 @@ export class ComunicationService {
     }
   }
 
+  /**
+   * Sets the active video by its ID and updates session storage with video info.
+   * @param id The ID of the video to activate.
+   */
   setactiveVideo(id:number) {
     this.dbs.videos$.subscribe((v) => {
       v.forEach(element => {
@@ -54,6 +67,10 @@ export class ComunicationService {
     })
   }
 
+  /**
+   * Gets the path of the first video in the list as the default starting video.
+   * @returns The HLS path string for the first video, or null if none found.
+   */
   getStartVideo() {
     this.getVideos()
     if (this.videos.length != 0) {
@@ -62,6 +79,9 @@ export class ComunicationService {
     return null
   }
 
+  /**
+   * Clears the currently active video source.
+   */
   clearVideo() {
     this.currentSource = '';
   }
