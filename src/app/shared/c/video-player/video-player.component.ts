@@ -13,7 +13,13 @@ import * as VPC from './video-player-code';
   styleUrl: './video-player.component.scss'
 })
 export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
+  /**
+   * Reference to the native video DOM element.
+   */
   @ViewChild('target', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
+  /**
+   * Input options including the list of video sources and configuration.
+   */
   @Input() videoOptions!: { sources: { src: string; type: string }[] };
   private mouseMoveListener!: (event: MouseEvent) => void;
   private touchMoveListener!: (event: TouchEvent) => void;
@@ -26,13 +32,21 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   showMobile = 0;
   videoStarted = false;
 
+  /**
+   * Injects communication service to access video context.
+   *
+   * @param {ComunicationService} com - Service for sharing video data across components.
+   */
   constructor(
     private com: ComunicationService,
   ){
     this.getActiveVideo();
   }
 
-
+  /**
+   * Lifecycle hook: After view initialization, sets up player, user interaction listeners,
+   * and restores playback state from storage.
+   */
   ngAfterViewInit(): void {
     this.checkStorage();
 
@@ -51,6 +65,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     this.initializePlayer();
   }
 
+  /**
+   * Initializes the Video.js player and attaches event listeners for playback and volume changes.
+   */
   private initializePlayer(): void {
     if (this.videoElement && this.videoElement.nativeElement) {
       const controlBarOptions = VPC.setUpControles();
@@ -102,6 +119,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Lifecycle hook: Removes listeners and cleans up player instance.
+   */
   ngOnDestroy(): void {
     document.removeEventListener('mousemove', this.mouseMoveListener)
     document.removeEventListener('touchmove', this.touchMoveListener)
@@ -113,6 +133,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     sessionStorage.removeItem('title_video')
   }
 
+  /**
+   * Retrieves current video data from communication service or sessionStorage.
+   */
   getActiveVideo(){
     this.element = this.com.currentElement;
     if (!this.element) {
@@ -123,6 +146,11 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     this.currentSource = this.com.currentSource;
   }
 
+  /**
+   * Manages visibility of header and control overlays based on user interaction.
+   *
+   * @param {boolean} mobile - Whether to apply mobile-specific behavior.
+   */
   showHeader(mobile:boolean = false): void {
     const obj = [
       document.getElementById('head'),
@@ -169,6 +197,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Loads the last watched video source from session storage if available.
+   */
   checkStorage() {
     let video = sessionStorage.getItem('current_video')
     if (video !== null) {
@@ -176,6 +207,11 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Saves or restores playback time, depending on the `get` flag.
+   *
+   * @param {boolean} get - If true, saves time; otherwise, restores it.
+   */
   setAndGetCurrentTime(get:boolean = true) {
     let time = this.player.currentTime()
     if (get && time) {
@@ -187,6 +223,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Toggles visibility of the quality picker and attaches outside click/touch listeners.
+   */
   toggleQualityPicker() {
     let mobile = window.innerWidth < 700;
     const qualityPicker = document.getElementById('qualityPicker');
@@ -197,6 +236,11 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Sets up event listeners for closing the quality picker when clicking or touching outside.
+   *
+   * @param {boolean} mobile - Determines the event type to bind.
+   */
   setListeners(mobile: boolean) {
     if (this.showQualityPicker && !mobile) {
       setTimeout(() => {
@@ -214,6 +258,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Handles clicks outside the quality picker to close it.
+   */
   private handleOutsideClick = (event: MouseEvent) => {
     const qualityPicker = document.getElementById('qualityPicker');
     if (qualityPicker && !qualityPicker.contains(event.target as Node)) {
@@ -223,6 +270,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Handles touches outside the quality picker to close it.
+   */
   private handleOutsideTouch = (event: TouchEvent) => {
     const qualityPicker = document.getElementById('qualityPicker');
     if (qualityPicker && !qualityPicker.contains(event.target as Node)) {
@@ -232,6 +282,12 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Changes the video quality by altering the source URL and preserving playback time.
+   *
+   * @param {string} quality - Desired video quality (e.g., '1080').
+   * @param {boolean} manual - Indicates whether the change is user-initiated.
+   */
   changeQality(quality: string, manual: boolean = true) {
     if (manual) {
       if (this.qualityCheckIntervalId) {
@@ -247,6 +303,14 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Replaces the current video source with the same video at a different quality level,
+   * seeking to the previous play time.
+   *
+   * @param {string} source - The current video source URL.
+   * @param {number} playTime - The time (in seconds) to seek after switching quality.
+   * @param {string} quality - The desired quality level (e.g., '720').
+   */
   setSourceWithOtherQuality(source: string, playTime: number, quality: string) {
     this.currentQuality = quality;
     const newSrc = source.replace(/_\d{3,4}p/, `_${quality}p`); // Replace any _[3 or 4 digits]p with the new quality
@@ -259,6 +323,10 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
 
   private qualityCheckIntervalId: any = null;
 
+  /**
+   * Periodically checks internet speed using a lightweight image and adjusts video quality accordingly.
+   * Designed to balance video resolution with user bandwidth without interrupting playback.
+   */
   checkInternetSpeedAndSetQuality() {
     // Define quality thresholds in Mbps
     const qualityMap = [
@@ -314,6 +382,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Toggles play and pause state from a mobile-optimized control and updates UI classes accordingly.
+   */
   togglePlayPause_mobile() {
     document.getElementById('playerSate_mobile')?.classList.toggle('custom_play_button');
     document.getElementById('playerSate_mobile')?.classList.toggle('custom_pause_button');
@@ -321,16 +392,26 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
       this.player.play();
       setTimeout(() => {
         this.showHeader(true);
-      }, 1000); // Delay to allow play action to complete before showing header
+      }, 1000);
     } else {
       this.player.pause();
     }
   }
 
+  /**
+   * Prevents event propagation for nested touch events (e.g. to keep controls responsive on mobile).
+   *
+   * @param {TouchEvent} event - The incoming touch event.
+   */
   sP(event: TouchEvent) {
     event.stopPropagation();
   }
 
+  /**
+   * Seeks the video playback 10 seconds forward or backward.
+   *
+   * @param {'forward' | 'backward'} way - Direction of skipping in the video timeline.
+   */
   videoForOrBackward(way: 'forward' | 'backward') {
     const currentTime = this.player.currentTime() || 0;
     const newTime = way === 'forward' ? currentTime + 10 : currentTime - 10;
@@ -341,6 +422,11 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
     // this.setAndGetCurrentTime(false);
   }
 
+  /**
+   * Getter for current screen width.
+   *
+   * @returns {number} - Width of the browser window in pixels.
+   */
   get screenwidth() {
     return window.innerWidth;
   }

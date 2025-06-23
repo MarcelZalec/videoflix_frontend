@@ -19,6 +19,12 @@ export class AuthService {
     this.httpClientWithoutInterceptor = new HttpClient(httpBackend);
   }
 
+  /**
+   * Performs user login by posting credentials to the backend.
+   * Stores token in local or session storage based on `remember` flag.
+   * @param user LoginModel containing user credentials and remember preference.
+   * @returns Observable of server response.
+   */
   login(user: LoginModel) {
     return this.http
       .post<any>(`${Config.FULL_LOGIN_URL}`, user)
@@ -30,13 +36,21 @@ export class AuthService {
       )
   }
 
+  /**
+   * Logs the user out by removing authentication tokens from local and session storage.
+   */
   logout() {
     const storage = sessionStorage;
     const storage2 = localStorage;
     storage.removeItem('token')
     storage2.removeItem('token')
   }
-  
+
+  /**
+   * Registers a new user and shows a toast notification upon success.
+   * @param user SignupModel containing user registration information.
+   * @returns Observable of server response.
+   */
   register(user: SignupModel): Observable<Object> {
     return this.http.post(`${Config.FULL_REGISTRATION_URL}`, user).pipe(
       tap((r)=> {
@@ -45,6 +59,13 @@ export class AuthService {
     )
   }
 
+  /**
+   * Resets the user's password using a token and the new password data.
+   * Shows a success or error toast notification depending on the result.
+   * @param token Password reset token provided to the user.
+   * @param reset New password or password object to submit.
+   * @returns Promise resolving with the HTTP response.
+   */
   async resetPassword(token:string, reset:any): Promise<any> {
     const url = `${Config.FULL_RESETPASS_URL}${token}`
     const body = {'password': reset}
@@ -64,6 +85,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Initiates the password reset flow by sending the user's email.
+   * This request bypasses any HTTP interceptors.
+   * @param email Email address of the user requesting password reset.
+   * @returns Promise resolving with the HTTP response.
+   */
   async forgetPass(email: string): Promise<any> {
     const body = { email };
     const link = `${Config.FULL_RESETPASS_URL}`;
@@ -81,10 +108,19 @@ export class AuthService {
     }
   }
 
+  /**
+   * Retrieves the authentication token from local or session storage.
+   * @returns The token if present, otherwise null.
+   */
   getToken() {
     return localStorage.getItem('token') || sessionStorage.getItem('token');
   }
 
+  /**
+   * Validates the provided token by posting it to the authorization endpoint.
+   * @param token Authentication token to validate.
+   * @returns Observable of the HTTP response.
+   */
   validateToken(token:string): Observable<any> {
     const headers = {Authorization: 'Token '+ token};
     const url = `${Config.FULL_AUTHORIZATION_URL}`;
@@ -95,6 +131,10 @@ export class AuthService {
     });
   }
 
+  /**
+   * Automatically logs the user in if a valid token is found in local storage.
+   * @returns Boolean indicating whether auto-login was successful.
+   */
   autoLogin() {
     const token = localStorage.getItem('token')
     if (token != null) {

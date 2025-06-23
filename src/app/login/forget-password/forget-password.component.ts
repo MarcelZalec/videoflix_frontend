@@ -14,6 +14,14 @@ import { LittleHelpersService } from '../../shared/services/little-helpers.servi
 export class ForgetPasswordComponent {
   forgotForm:FormGroup;
 
+  /**
+   * Initializes the component and the form group with validation for the email field.
+   *
+   * @param {Router} router - Angular router for navigation.
+   * @param {FormBuilder} fb - Form builder for constructing the reactive form.
+   * @param {AuthService} as - Authentication service for handling API requests.
+   * @param {LittleHelpersService} lh - Helper service for UI feedback (e.g. toast notifications).
+   */
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -25,7 +33,12 @@ export class ForgetPasswordComponent {
     })
   }
 
-
+  /**
+   * Sends a password reset email if the form is valid.
+   * Provides user feedback via toast notifications based on the server response.
+   *
+   * @returns {Promise<void>}
+   */
   async sendMail(){
     if (this.forgotForm.valid) {
       try {

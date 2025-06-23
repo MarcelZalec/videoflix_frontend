@@ -16,6 +16,14 @@ export class SignInComponent {
   signInForm:FormGroup;
 
 
+  /**
+   * Constructs the component and initializes the login form with validation rules.
+   *
+   * @param {Router} router - Used for route navigation.
+   * @param {FormBuilder} fb - Builds the reactive login form.
+   * @param {LittleHelpersService} lh - UI helper service for feedback (e.g., toast messages).
+   * @param {AuthService} as - Service for handling authentication-related API calls.
+   */
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -29,6 +37,12 @@ export class SignInComponent {
     })
   }
 
+  /**
+   * Attempts to log the user in using form values.
+   * If successful, navigates to the main page. Otherwise, shows feedback and resets the form.
+   *
+   * @returns {Promise<void>}
+   */
   async login() {
     let user= new LoginModel(
       this.signInForm.value.email,
@@ -49,14 +63,25 @@ export class SignInComponent {
     }      
   }
 
+  /**
+   * Navigates to the "Forgot Password" screen.
+   */
   goToForgetPassword() {
     this.router.navigateByUrl('forget')
   }
 
+  /**
+   * Navigates to the "Sign Up" screen.
+   */
   goToSignUp() {
     this.router.navigateByUrl('signUp')
   }
 
+  /**
+   * Getter for observing the toast message signal from the helper service.
+   *
+   * @returns {Observable<string>} - Stream of toast messages.
+   */
   get toastMessage() {
     return this.lh.toastSignal()
   }

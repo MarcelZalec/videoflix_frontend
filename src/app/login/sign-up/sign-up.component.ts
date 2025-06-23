@@ -15,6 +15,13 @@ import { AuthService } from '../../shared/services/auth.service';
 export class SignUpComponent {
   signUpForm:FormGroup;
 
+  /**
+   * Initializes the form with email and password fields and sets email if available in sessionStorage.
+   * 
+   * @param {FormBuilder} fb - Form builder used to construct the form group.
+   * @param {LittleHelpersService} lh - Helper service for displaying UI feedback (e.g., toast messages).
+   * @param {AuthService} as - Service responsible for authentication API interactions.
+   */
   constructor(
     private fb: FormBuilder,
     public lh: LittleHelpersService,
@@ -28,6 +35,9 @@ export class SignUpComponent {
     this.tryToSetEmail()
   }
 
+  /**
+   * Attempts to prefill the email field from sessionStorage if available.
+   */
   tryToSetEmail(){
     let m = sessionStorage.getItem('email')
     if (m !== '') {
@@ -37,6 +47,12 @@ export class SignUpComponent {
     }
   }
 
+  /**
+   * Registers a new user using the form data.
+   * Provides feedback based on form validity and API responses.
+   *
+   * @returns {Promise<void>}
+   */
   async register(){
     try {
       let user= new SignupModel(

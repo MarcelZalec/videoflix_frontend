@@ -21,6 +21,15 @@ export class LoginComponent implements OnInit {
   startForm:FormGroup;
   signUp: boolean = false;
 
+  /**
+   * Initializes the component and the form used to collect user's email.
+   * 
+   * @param {Router} router - Angular Router for navigation.
+   * @param {FormBuilder} fb - Reactive form builder.
+   * @param {LittleHelpersService} lh - UI utility service for toast feedback.
+   * @param {AuthService} as - Service for authentication methods including auto-login.
+   * @param {Renderer2} renderer - Renderer for dynamic DOM styling.
+   */
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -33,6 +42,11 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  /**
+   * Lifecycle hook that runs after component initialization.
+   * Determines the current route and sets background imagery based on route state.
+   * Automatically redirects to main page if already authenticated.
+   */
   ngOnInit(): void {
     if (this.router.url === '/'){
       this.startpage = true;
@@ -58,10 +72,17 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Lifecycle hook that runs after the view is initialized.
+   * Ensures the correct background image is applied.
+   */
   ngAfterViewInit(): void {
     this.setBackgroundImage();
   }
 
+  /**
+   * Dynamically sets the background image based on current route state.
+   */
   setBackgroundImage() {
     if (this.bodyRef) {
       let backgroundImage = 'url(/img/0f3b0b3833031bc99687aa3a9f9377f5bacdb640.jpg)';
@@ -74,6 +95,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Navigates to the sign-up page after validating the email field.
+   * Stores the email in sessionStorage to prefill the sign-up form.
+   */
   goToSignUp(){
     if(this.startForm.valid) {
       this.errorMessage = false;
@@ -85,10 +110,18 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Navigates to the login page.
+   */
   goToLogin() {
     this.router.navigateByUrl('login')
   }
 
+  /**
+   * Getter to expose the toast message observable from the helper service.
+   * 
+   * @returns {Observable<string>} - Observable for UI toast messages.
+   */
   get toastMessage() {
     return this.lh.toastSignal()
   }

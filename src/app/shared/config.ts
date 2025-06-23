@@ -1,7 +1,7 @@
-// hier werden die Urls bereitestellt
-const API_BASE_URL = 'http://127.0.0.1:8000/api/';
-export const STATIC_BASE_URL = 'http://127.0.0.1:8000/';
-export const MEDIA_URL = 'http://127.0.0.1:8000/media/';
+// the URLs are provided here
+export const STATIC_BASE_URL = 'http://127.0.0.1:5500/';
+export const MEDIA_URL = STATIC_BASE_URL + 'media/';
+const API_BASE_URL = STATIC_BASE_URL + 'api/';
 
 const LOGIN_URL = 'login/';
 const REGISTER_URL='registration/';
