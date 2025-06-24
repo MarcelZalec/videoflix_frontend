@@ -70,7 +70,7 @@ export class SignUpComponent {
         this.lh.showToastSignal("Passwords do not match!")
       } else return
     } catch (e:any) {
-      if (e) {
+      if (e.error['email']) {
         this.lh.showToastSignal(`${e.error['email'][0]}`)
       } else {
         this.lh.showToastSignal(`Form not valid`)

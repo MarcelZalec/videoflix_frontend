@@ -1,5 +1,7 @@
+import { environment } from "../../environments/environment";
+
 // the URLs are provided here
-export const STATIC_BASE_URL = 'http://127.0.0.1:5500/';
+export const STATIC_BASE_URL = environment.apiUrl;
 export const MEDIA_URL = STATIC_BASE_URL + 'media/';
 const API_BASE_URL = STATIC_BASE_URL + 'api/';
 
