@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { ToastmsgComponent } from '../shared/c/toastmsg/toastmsg.component';
+import { ToastmsgComponent } from '../shared/components/toastmsg/toastmsg.component';
 import { LittleHelpersService } from '../shared/services/little-helpers.service';
-import { FooterComponent } from '../shared/c/footer/footer.component';
-import { HeaderComponent } from '../shared/c/header/header.component';
+import { FooterComponent } from '../shared/components/footer/footer.component';
+import { HeaderComponent } from '../shared/components/header/header.component';
 import { AuthService } from '../shared/services/auth.service';
 import { set } from 'video.js/dist/types/tech/middleware';
 

@@ -3,19 +3,19 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { DatabaseService } from '../shared/services/database.service';
 import { ComunicationService } from '../shared/services/comunication.service';
-import { FooterComponent } from '../shared/c/footer/footer.component';
-import { HeaderComponent } from '../shared/c/header/header.component';
+import { FooterComponent } from '../shared/components/footer/footer.component';
+import { HeaderComponent } from '../shared/components/header/header.component';
 import { LittleHelpersService } from '../shared/services/little-helpers.service';
 
 @Component({
-  selector: 'app-main',
+  selector: 'app-core',
   imports: [
     CommonModule,
     FooterComponent,
     HeaderComponent,
   ],
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.scss'
+  templateUrl: './core.component.html',
+  styleUrl: './core.component.scss'
 })
 /**
  * Component responsible for displaying categorized videos, latest uploads, and managing
@@ -24,7 +24,7 @@ import { LittleHelpersService } from '../shared/services/little-helpers.service'
  * Handles logic for video organization, scroll-based UI animation, responsive design,
  * and dynamic video detail loading.
  */
-export class MainComponent implements OnInit, OnDestroy {
+export class CoreComponent implements OnInit, OnDestroy {
   videos:any[] = [];
   latestVideos:any[] = [];
   categorys:string[] = [];
