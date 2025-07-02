@@ -60,7 +60,6 @@ export class CoreComponent implements OnInit, OnDestroy {
     this.videos = [];
     this.categorys = [];
     this.dbs.loadVideos();
-    this.setStartVideo();
     window.addEventListener('scroll', this.scrollEventListener);
     this.setMobile()
   }
@@ -174,10 +173,24 @@ export class CoreComponent implements OnInit, OnDestroy {
         // this.videoSource = this.com.setVideoPath(videoObj.video, false); // funktioniert weiß nur nicht ob ich das so mache
         return;
       }
+    } else {
+      this.setDefaultSourceOrStartup()
     }
-    this.imgSource = 'http://127.0.0.1:8000/media/thumbnails/All-Round_Home-Server_selbst_bauen_Ideal_für_Anfänger_inkl_Ubuntu_Installation_4gTwXcY.png';
-    this.videoSource = '';
-    this.currentE = null;
+  }
+
+  /**
+   * Set the first element or the default fallback
+   */
+  setDefaultSourceOrStartup() {
+    if (this.all_categorys && this.all_categorys.length > 0) {
+      const videoObj = this.all_categorys[0].videos[0];
+      this.imgSource = videoObj.thumbnail;
+      this.currentE = videoObj;
+    } else {
+      this.imgSource = '';
+      this.videoSource = '';
+      this.currentE = null;
+    }
   }
 
 
@@ -199,6 +212,7 @@ export class CoreComponent implements OnInit, OnDestroy {
       this.latestVideos.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       this.latestVideos = this.latestVideos.slice(0, 6); // Begrenze auf die neuesten 6 Videos
     })
+    this.setStartVideo();
   }
 
   /**
