@@ -43,15 +43,15 @@
     }
 
     #backgroundImg {
+        position: unset !important;
         height: 35vh !important;
-        top: 0;
     }
 
     .main_mobile_video_details {
         min-height: calc(100vh - 61px) !important;
         padding: 0px 0px !important;
         .main_head_text {
-            padding: 0px 20px !important;
+            padding: 30px 20px !important;
             span {
                 font-size: 50px !important;
             }
