@@ -69,7 +69,11 @@ export class HeaderComponent implements OnInit {
    * Navigates to the root path ('/').
    */
   goToRootPath() {
-    this.router.navigateByUrl('')
+    if (sessionStorage.getItem('token')) {
+      this.router.navigateByUrl('main')
+    } else {
+      this.router.navigateByUrl('')
+    }
   }
 
   /**
