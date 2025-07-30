@@ -54,7 +54,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Lifecycle hook: Sets up video categories, start video, scroll listener, and mobile detection.
+   * Lifecycle hook: Sets up video categories, scroll listener, and mobile detection.
    */
   ngOnInit(): void {
     this.videos = [];
