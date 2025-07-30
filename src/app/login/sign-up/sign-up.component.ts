@@ -56,7 +56,6 @@ export class SignUpComponent {
   async register(){
     try {
       let user= new SignupModel(
-        this.signUpForm.value.username,
         this.signUpForm.value.email,
         this.signUpForm.value.password,
         this.signUpForm.value.password2
