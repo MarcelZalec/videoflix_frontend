@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://192.168.0.146/'
+    apiUrl: 'https://videoflix.ip.homesev.at/'
 };
