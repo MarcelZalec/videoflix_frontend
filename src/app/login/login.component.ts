@@ -70,6 +70,8 @@ export class LoginComponent implements OnInit {
     if (this.as.autoLogin()) {
       this.router.navigateByUrl('main')
     }
+
+    this.as.checkBackendOnlineStatus()
   }
 
   /**

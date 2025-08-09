@@ -4,6 +4,8 @@ import { Observable, tap, firstValueFrom } from 'rxjs';
 import { SignupModel, LoginModel } from '../models/login.model';
 import * as Config from '../config';
 import { LittleHelpersService } from './little-helpers.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -146,5 +148,34 @@ export class AuthService {
     } else {
       return false
     }
+  }
+
+  /**
+   * Checks whether the backend server is reachable.
+   *
+   * Sends a GET request to the configured backend URL. If the server responds successfully,
+   * the response is logged to the console. If an error occurs (e.g., server is offline or
+   * a network issue), a toast notification is shown and the error is logged.
+   *
+   * This method uses RxJS operators to handle errors gracefully without breaking the observable stream.
+   *
+   * @returns void
+   */
+  checkBackendOnlineStatus() {
+    this.http.get(`${Config.STATIC_BASE_URL}`, { responseType: 'text' })
+      .pipe(
+        catchError(error => {
+          this.lh.showToastSignal(`❌ Backend server is offline or an error occurred`, 0);
+          console.info("Backend server is offline")
+          //console.error("Error during backend check:", error);
+          return of(null);
+        })
+      )
+      .subscribe(response => {
+        if (response !== null) {
+          // this.lh.showToastSignal(`Backend server is online`);
+          // console.log("✅ Backend is reachable:", response);
+        }
+      });
   }
 }
