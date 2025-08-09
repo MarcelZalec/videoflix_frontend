@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { LittleHelpersService, ToastMessage } from '../../services/little-helpers.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-toastmsg',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './toastmsg.component.html',
   styleUrl: './toastmsg.component.scss'
 })
@@ -12,6 +13,7 @@ export class ToastmsgComponent {
    * Holds the current toast message object to be displayed.
    */
   toastMessage: ToastMessage | null = null;
+  toastAnimationClass = ''
 
   /**
    * Injects the helper service used for managing toast signals.
@@ -20,7 +22,9 @@ export class ToastmsgComponent {
    */
   constructor(
     private lh: LittleHelpersService,
-  ) {}
+  ) {
+    this.toastAnimationClass = lh.toastAnimationClass
+  }
 
   /**
    * Getter for observing toast signal messages.

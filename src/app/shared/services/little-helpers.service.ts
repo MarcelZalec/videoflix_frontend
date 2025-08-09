@@ -26,6 +26,7 @@ export class LittleHelpersService {
   toast$ = this.toastSubject.asObservable();
   toastSignal = signal<string>('');
   screenWidth!:number;
+  toastAnimationClass = ''
 
   /**
    * Toggles the visibility of a password field at the specified index.
@@ -63,13 +64,22 @@ export class LittleHelpersService {
   /**
    * Displays a temporary toast-like message using a reactive signal.
    * Automatically resets the message after a short delay.
-   * @param message Message text to show in the toast.
+   * @param message - The message to display in the toast.
+   * @param time - Duration in milliseconds before the toast is cleared. Defaults to 2500 ms.
+   *               If less than 10, the message will persist until manually cleared.
    */
-  showToastSignal(message: string) {
+  showToastSignal(message: string, time=2500) {
     this.toastSignal.set(message);
-    setTimeout(() => {
-      this.toastSignal.set('');
-    }, 2500);
+    if (time < 10) {
+      this.toastAnimationClass = 'noAnimation';
+    } else {
+      this.toastAnimationClass = '';
+    }
+    if (time > 10) {
+      setTimeout(() => {
+        this.toastSignal.set('');
+      }, time);
+    }
   }
 
   /**
