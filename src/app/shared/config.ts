@@ -11,9 +11,11 @@ const REGISTER_URL='registration/';
 const RESETPASS = 'resetPass/';
 const VIDEOS = 'videos/';
 const AUTH = 'authorization/';
+const STATUS = 'status/'
 
 export const FULL_REGISTRATION_URL = AUTH_BASE_URL + REGISTER_URL;
 export const FULL_LOGIN_URL = AUTH_BASE_URL + LOGIN_URL;
 export const FULL_RESETPASS_URL = AUTH_BASE_URL + RESETPASS;
 export const FULL_VIDEOS_URL = API_BASE_URL + VIDEOS;
 export const FULL_AUTHORIZATION_URL = AUTH_BASE_URL + AUTH;
+export const FULL_STATUS_URL = API_BASE_URL + STATUS;

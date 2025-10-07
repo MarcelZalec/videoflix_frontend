@@ -162,13 +162,17 @@ export class AuthService {
    * @returns void
    */
   checkBackendOnlineStatus() {
-    this.http.get(`${Config.STATIC_BASE_URL}`, { responseType: 'text' })
+    this.http.get(`${Config.FULL_STATUS_URL}`, { observe: 'response' }) // { responseType: 'text' }
       .pipe(
         catchError(error => {
-          this.lh.showToastSignal(`❌ Backend server is offline or an error occurred`, 0);
-          console.info("Backend server is offline")
-          //console.error("Error during backend check:", error);
-          return of(null);
+          if (error.status >= 100 && error.status < 600) {
+            return of(null);
+          } else {
+            this.lh.showToastSignal(`❌ Backend server is offline or an error occurred`, 0);
+            console.info("Backend server is offline")
+            //console.error("Error during backend check:", error);
+            return of(null);
+          }
         })
       )
       .subscribe(response => {
