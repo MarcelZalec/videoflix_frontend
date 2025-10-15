@@ -21,8 +21,13 @@ export class DatabaseService {
    * @returns A subscription to the video data stream (not recommended for component use).
    */
   async loadVideos() {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+
     return this.http
-      .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`)
+      .get<VideoModel[]>(`${Config.FULL_VIDEOS_URL}`, { headers })
       .pipe(
         map((videos) =>
           videos.map(video => ({
