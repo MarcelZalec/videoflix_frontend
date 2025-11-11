@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
-import videojs from 'video.js'
+import videojs from 'video.js';
 import { ComunicationService } from '../../services/comunication.service';
 import Player from 'video.js/dist/types/player';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import * as VPC from './video-player-code';
+import { DatabaseService } from '../../services/database.service';
 
 @Component({
   selector: 'app-video-player',
@@ -26,7 +27,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   private timeoutId: number | undefined;
   player!: Player;// videojs.Player; 
   element:any;
-  currentSource = '';
+  currentSource = -1;
   showQualityPicker = false;
   currentQuality = '720'; // Default quality
   showMobile = 0;
@@ -39,6 +40,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
    */
   constructor(
     private com: ComunicationService,
+    private dbs: DatabaseService,
   ){
     this.getActiveVideo();
   }
@@ -71,7 +73,6 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
   private initializePlayer(): void {
     if (this.videoElement && this.videoElement.nativeElement) {
       const controlBarOptions = VPC.setUpControles();
-
       this.player = videojs(this.videoElement.nativeElement, {
         ...this.videoOptions,
         controls: true,
@@ -85,7 +86,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
         },
         sources: [
           {
-            src: this.currentSource,
+            src: this.element.video_file,
             type: 'application/x-mpegURL',
           },
         ],
@@ -202,8 +203,9 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
    */
   checkStorage() {
     let video = sessionStorage.getItem('current_video')
-    if (video !== null) {
-      this.currentSource = video
+    let id = video ? Number(video) : null
+    if (id !== null) {
+      this.currentSource = id
     }
   }
 
@@ -307,18 +309,25 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
    * Replaces the current video source with the same video at a different quality level,
    * seeking to the previous play time.
    *
-   * @param {string} source - The current video source URL.
+   * @param {number} id - The current video source id.
    * @param {number} playTime - The time (in seconds) to seek after switching quality.
    * @param {string} quality - The desired quality level (e.g., '720').
    */
-  setSourceWithOtherQuality(source: string, playTime: number, quality: string) {
+  async setSourceWithOtherQuality(id: number, playTime: number, quality: string) {
     this.currentQuality = quality;
-    const newSrc = source.replace(/_\d{3,4}p/, `_${quality}p`); // Replace any _[3 or 4 digits]p with the new quality
-    sessionStorage.setItem('current_video', newSrc);
-    this.player.src(newSrc);
-    this.player.load();
-    this.player.currentTime(playTime);
-    this.player.play();
+    const playlistText = await this.dbs.fetchSignedPlaylist(id, this.currentQuality);
+    const blob = new Blob([playlistText], { type: 'application/x-mpegURL' });
+    const blobUrl = URL.createObjectURL(blob);
+    this.player.pause();
+    this.player.src({
+      src: blobUrl,
+      type: 'application/x-mpegURL',
+    });
+    this.player.load(); // ✅ wichtig: neu laden
+    this.player.one('loadedmetadata', () => {
+      this.player.currentTime(playTime);
+      this.player.play();
+    });
   }
 
   private qualityCheckIntervalId: any = null;

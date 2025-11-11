@@ -89,4 +89,14 @@ export class LittleHelpersService {
   checkScreenWith() {
     return screen.width
   }
+
+  getCookie(name: string) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return (parts as any).pop().split(';').shift();
+    } else {
+      return
+    }
+  }
 }

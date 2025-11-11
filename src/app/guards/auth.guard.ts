@@ -26,7 +26,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
         return false
       }
     } catch (error) {
-      console.log("Invalid token", error);
       router.navigateByUrl('login')
       return false
     }
