@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { VideoModel } from '../models/video.model';
 import * as Config from '../config'
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,9 @@ import * as Config from '../config'
 export class ComunicationService {
   videos:VideoModel[] = [];
   currentElement:any;
-  currentSource = '';
+  currentSource = 0;
   resulution = '720p';
+  cs : any
 
   constructor(
     private dbs: DatabaseService, 
@@ -26,7 +28,7 @@ export class ComunicationService {
         const formatted = v.map((v)=> {
           return {
             ...v,
-            video_file: this.setVideoPath(v.video_file)
+            //video_file: this.setVideoPath(v.video_file)
           }
         })
         this.videos.push(...formatted)
@@ -43,9 +45,9 @@ export class ComunicationService {
   setVideoPath(path:string, replace:boolean = true): string{
     const updated_path = path.replace('.mp4', `_${this.resulution}_hls/index.m3u8`)
     if (!replace) {
-      return `${Config.MEDIA_URL}${path}`;
+      return `${Config.STATIC_BASE_URL}${path}`;
     } else {
-      return `${Config.MEDIA_URL}${updated_path}`;
+      return `${Config.STATIC_BASE_URL}${updated_path}`;
     }
   }
 
@@ -53,18 +55,21 @@ export class ComunicationService {
    * Sets the active video by its ID and updates session storage with video info.
    * @param id The ID of the video to activate.
    */
-  setactiveVideo(id:number) {
-    this.dbs.videos$.subscribe((v) => {
-      v.forEach(element => {
-        if (element.id == id) {
-          this.currentElement = element
-          let file = this.setVideoPath(element.video_file)
-          this.currentSource = file
-          sessionStorage.setItem('current_video', this.currentSource)
-          sessionStorage.setItem('title_video', this.currentElement.title)
-        }
-      });
-    })
+  async setactiveVideo(id: number) {
+    const videos = await firstValueFrom(this.dbs.videos$);
+    const element = videos.find(v => v.id === id) ;
+
+    if (element) {  
+      this.currentElement = element;
+      const d = await this.dbs.loadVideo(element.video_file);
+      this.currentElement = {
+        ...element,
+        video_file: d
+      };
+      this.currentSource = element.id
+      sessionStorage.setItem('current_video', this. currentSource.toString());
+      sessionStorage.setItem('title_video', this.currentElement.title);
+    }
   }
 
   /**
@@ -83,6 +88,6 @@ export class ComunicationService {
    * Clears the currently active video source.
    */
   clearVideo() {
-    this.currentSource = '';
+    this.currentSource = -1;
   }
 }

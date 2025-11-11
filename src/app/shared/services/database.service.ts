@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, firstValueFrom } from 'rxjs';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import * as Config from './../config' 
 import { VideoModel } from '../models/video.model';
+import { LittleHelpersService } from './little-helpers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class DatabaseService {
   public videoSubject = new BehaviorSubject<VideoModel[]>([]);
   public videos$ = this.videoSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private lh: LittleHelpersService) {}
 
   /**
    * Loads videos from the backend endpoint and updates the video subject.
@@ -31,8 +32,7 @@ export class DatabaseService {
       .pipe(
         map((videos) =>
           videos.map(video => ({
-            ...video,
-            thumbnail: `${Config.MEDIA_URL}${video.thumbnail}`
+            ...video
           }))
         ),
         tap((v) => {
@@ -44,5 +44,23 @@ export class DatabaseService {
         })
       )
       .subscribe();
+  }
+
+  async loadVideo(id:string): Promise<string> {
+    const token: string = this.lh.getCookie('media_token') || sessionStorage.getItem('media_token')
+    const url = new URL(id)
+    url.searchParams.set("expires", `${token}`)
+    return `${url}`;
+  }
+
+  async fetchSignedPlaylist(videoId: number, resolution: string): Promise<string> {
+    const token = sessionStorage.getItem('media_token') || '';
+    const expires = token; // oder ein separates Token, je nach Backend
+    const response = await firstValueFrom(
+      this.http.get(`${Config.FULL_SIGNATURE_URL}${videoId}?resolution=${resolution}&token=${token}&expires=${expires}`, {
+        responseType: 'text' // WICHTIG: kein JSON!
+      })
+    );
+    return response;
   }
 }

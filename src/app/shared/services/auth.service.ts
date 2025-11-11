@@ -29,10 +29,11 @@ export class AuthService {
    */
   login(user: LoginModel) {
     return this.http
-      .post<any>(`${Config.FULL_LOGIN_URL}`, user)
+      .post<any>(`${Config.FULL_LOGIN_URL}`, user, { withCredentials: true })
       .pipe(
         tap((response)=> {
           const storage = user.remember ? localStorage : sessionStorage;
+          storage.setItem('media_token', response.media_token)
           storage.setItem('token', response.token)
         })
       )
